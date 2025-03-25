@@ -1,0 +1,28 @@
+{
+  "suggestions": {
+    "codebase": {
+      "enabled": true,
+      "files": {
+        "include": [
+          "**/*.js",
+          "**/*.jsx",
+          "**/*.ts",
+          "**/*.tsx",
+          "**/*.css",
+          "**/*.json"
+        ],
+        "exclude": [
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/.next/**",
+          "**/out/**",
+          "**/build/**"
+        ]
+      }
+    },
+    "llmConfig": {
+      "temperature": 0.1,
+      "contextWindow": "maximum"
+    }
+  }
+}

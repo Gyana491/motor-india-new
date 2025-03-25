@@ -1,0 +1,523 @@
+{
+    "posts": [
+        {
+            "id": 3366,
+            "title": "Tata Nexon",
+            "slug": "tata-nexon",
+            "image_url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-exterior-image-165.webp",
+            "image_alt": "Tata Nexon Exterior Image 165",
+            "brand_name": "Tata",
+            "model_name": "Nexon",
+            "is_launched": "1",
+            "body_type": "SUV",
+            "360-view": {
+                "interior": "https://stimg.cardekho.com/images/feelthecar360view/Interior/Tata/Tata-Nexon/Interior.html",
+                "exterior": "https://stimg.cardekho.com/images/feelthecar360view/Exterior/Tata/Tata-Nexon/Exterior.html"
+            },
+            "price": {
+                "min_price": 799000,
+                "max_price": 1559000,
+                "min_price_formatted": "₹ 7.99 Lakh*",
+                "max_price_formatted": "₹ 15.59 Lakh*"
+            },
+            "keySpecs": {
+                "mileage": "24.08 Km/L"
+            },
+            "variants": [
+                {
+                    "slug": "tata-nexon-creative-plus-ps-dark-diesel-amt",
+                    "name": "Tata Nexon Creative Plus PS Dark Diesel AMT",
+                    "variant-name": "Creative Plus PS Dark Diesel AMT",
+                    "price": 1479000,
+                    "fuel-type": "Diesel",
+                    "mileage": "24.08 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-pure-plus-s-diesel",
+                    "name": "Tata Nexon Pure Plus S Diesel",
+                    "variant-name": "Pure Plus S Diesel",
+                    "price": 1129000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-pure-plus-cng",
+                    "name": "Tata Nexon Pure Plus CNG",
+                    "variant-name": "Pure Plus CNG",
+                    "price": 1069000,
+                    "fuel-type": "CNG",
+                    "mileage": "17.44 Km/Kg",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-pure-plus-diesel",
+                    "name": "Tata Nexon Pure Plus Diesel",
+                    "variant-name": "Pure Plus Diesel",
+                    "price": 1099000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-ps-dt-diesel",
+                    "name": "Tata Nexon Fearless Plus PS DT Diesel",
+                    "variant-name": "Fearless Plus PS DT Diesel",
+                    "price": 1469000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-ps-dark",
+                    "name": "Tata Nexon Fearless Plus PS Dark",
+                    "variant-name": "Fearless Plus PS Dark",
+                    "price": 1349000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-ps-dark-diesel",
+                    "name": "Tata Nexon Fearless Plus PS Dark Diesel",
+                    "variant-name": "Fearless Plus PS Dark Diesel",
+                    "price": 1489000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus-cng",
+                    "name": "Tata Nexon Smart Plus CNG",
+                    "variant-name": "Smart Plus CNG",
+                    "price": 999000,
+                    "fuel-type": "CNG",
+                    "mileage": "17.44 Km/Kg",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-ps-dark-diesel-amt",
+                    "name": "Tata Nexon Fearless Plus PS Dark Diesel AMT",
+                    "variant-name": "Fearless Plus PS Dark Diesel AMT",
+                    "price": 1559000,
+                    "fuel-type": "Diesel",
+                    "mileage": "24.08 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus-s-cng",
+                    "name": "Tata Nexon Smart Plus S CNG",
+                    "variant-name": "Smart Plus S CNG",
+                    "price": 1029000,
+                    "fuel-type": "CNG",
+                    "mileage": "17.44 Km/Kg",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-ps-dt",
+                    "name": "Tata Nexon Fearless Plus PS DT",
+                    "variant-name": "Fearless Plus PS DT",
+                    "price": 1329000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearless-plus-s-dt",
+                    "name": "Tata Nexon Fearless Plus S DT",
+                    "variant-name": "",
+                    "price": 1329000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-smart",
+                    "name": "Tata Nexon Smart",
+                    "variant-name": "Smart",
+                    "price": 799000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-fearlesspr-dt-dca",
+                    "name": "Tata Nexon FearlessPR DT DCA",
+                    "variant-name": "",
+                    "price": 1349000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.01 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-fearless-s-dt",
+                    "name": "Tata Nexon Fearless S DT",
+                    "variant-name": "",
+                    "price": 1309000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-amt",
+                    "name": "Tata Nexon Creative AMT",
+                    "variant-name": "Creative AMT",
+                    "price": 1169000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.18 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus-diesel",
+                    "name": "Tata Nexon Smart Plus Diesel",
+                    "variant-name": "Smart Plus Diesel",
+                    "price": 999000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-plus-s-dark-diesel",
+                    "name": "Tata Nexon Creative Plus S Dark Diesel",
+                    "variant-name": "Creative Plus S Dark Diesel",
+                    "price": 1309000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-plus-s-diesel",
+                    "name": "Tata Nexon Creative Plus S Diesel",
+                    "variant-name": "Creative Plus S Diesel",
+                    "price": 1269000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus-s",
+                    "name": "Tata Nexon Smart Plus S",
+                    "variant-name": "Smart Plus S",
+                    "price": 919000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-dca",
+                    "name": "Tata Nexon Creative DCA",
+                    "variant-name": "Creative DCA",
+                    "price": 1219000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.01 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus-s-diesel",
+                    "name": "Tata Nexon Smart Plus S Diesel",
+                    "variant-name": "Smart Plus S Diesel",
+                    "price": 1029000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-plus-s-diesel-amt",
+                    "name": "Tata Nexon Creative Plus S Diesel AMT",
+                    "variant-name": "Creative Plus S Diesel AMT",
+                    "price": 1339000,
+                    "fuel-type": "Diesel",
+                    "mileage": "24.08 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-creative-diesel",
+                    "name": "Tata Nexon Creative Diesel",
+                    "variant-name": "Creative Diesel",
+                    "price": 1239000,
+                    "fuel-type": "Diesel",
+                    "mileage": "23.23 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-diesel-amt",
+                    "name": "Tata Nexon Creative Diesel AMT",
+                    "variant-name": "Creative Diesel AMT",
+                    "price": 1309000,
+                    "fuel-type": "Diesel",
+                    "mileage": "24.08 Kmpl",
+                    "range": null,
+                    "transmission": "Automatic"
+                },
+                {
+                    "slug": "tata-nexon-smart-plus",
+                    "name": "Tata Nexon Smart Plus",
+                    "variant-name": "Smart Plus",
+                    "price": 889000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-plus-s",
+                    "name": "Tata Nexon Creative Plus S",
+                    "variant-name": "Creative Plus S",
+                    "price": 1129000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                },
+                {
+                    "slug": "tata-nexon-creative-plus-s-dark",
+                    "name": "Tata Nexon Creative Plus S Dark",
+                    "variant-name": "Creative Plus S Dark",
+                    "price": 1169000,
+                    "fuel-type": "Petrol",
+                    "mileage": "17.44 Kmpl",
+                    "range": null,
+                    "transmission": "Manual"
+                }
+            ],
+            "images": {
+                "interior": {
+                    "0": {
+                        "alt": "Ac Controls",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-ac-controls-151.webp"
+                    },
+                    "1": {
+                        "alt": "Airbags",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-airbags-94.webp"
+                    },
+                    "2": {
+                        "alt": "Dashboard",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-dashboard-59.webp"
+                    },
+                    "3": {
+                        "alt": "Door View Of Driver Seat",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-door-view-of-driver-seat-51.webp"
+                    },
+                    "4": {
+                        "alt": "Front Air Vents",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-front-air-vents-144.webp"
+                    },
+                    "5": {
+                        "alt": "Gear Shifter",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-gear-shifter-87.webp"
+                    },
+                    "6": {
+                        "alt": "Glovebox",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-glovebox-130.webp"
+                    },
+                    "7": {
+                        "alt": "Infotainment Stytem",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-infotainment-stytem-57.webp"
+                    },
+                    "8": {
+                        "alt": "Infotainment System Main Menu",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-infotainment-system-main-menu-183.webp"
+                    },
+                    "9": {
+                        "alt": "Instrument Cluster",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-instrument-cluster-62.webp"
+                    },
+                    "10": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-207.webp"
+                    },
+                    "11": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-208.webp"
+                    },
+                    "12": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-209.webp"
+                    },
+                    "13": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-210.webp"
+                    },
+                    "14": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-211.webp"
+                    },
+                    "15": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-212.webp"
+                    },
+                    "16": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-213.webp"
+                    },
+                    "17": {
+                        "alt": "Interior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-interior-image-214.webp"
+                    },
+                    "18": {
+                        "alt": "Knob Selector",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-knob-selector-184.webp"
+                    },
+                    "19": {
+                        "alt": "Parking Camera Display",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-parking-camera-display-136.webp"
+                    },
+                    "20": {
+                        "alt": "Seats (aerial View)",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-seats-aerial-view-53.webp"
+                    },
+                    "21": {
+                        "alt": "Speakers",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-speakers-58.webp"
+                    },
+                    "22": {
+                        "alt": "Steering Wheel",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-steering-wheel-54.webp"
+                    },
+                    "23": {
+                        "alt": "Sun Roof Moon Roof",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-sun-roof-moon-roof-81.webp"
+                    },
+                    "24": {
+                        "alt": "Wireless Charging Pad",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-wireless-charging-pad-206.webp"
+                    },
+                    "count": 25
+                },
+                "exterior": {
+                    "0": {
+                        "alt": "Abs Working",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-abs-working-160.webp"
+                    },
+                    "1": {
+                        "alt": "Exterior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-exterior-image-164.webp"
+                    },
+                    "2": {
+                        "alt": "Exterior Image",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-exterior-image-165.webp"
+                    },
+                    "3": {
+                        "alt": "Front Fog Lamp",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-front-fog-lamp-41.webp"
+                    },
+                    "4": {
+                        "alt": "Front Left Side",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-front-left-side-47.webp"
+                    },
+                    "5": {
+                        "alt": "Front View",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-front-view-118.webp"
+                    },
+                    "6": {
+                        "alt": "Grille",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-grille-97.webp"
+                    },
+                    "7": {
+                        "alt": "Headlight",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-headlight-43.webp"
+                    },
+                    "8": {
+                        "alt": "Rear Left View",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-rear-left-view-121.webp"
+                    },
+                    "9": {
+                        "alt": "Rear Seats (turned Over)",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-rear-seats-turned-over-115.webp"
+                    },
+                    "10": {
+                        "alt": "Rear View",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-rear-view-119.webp"
+                    },
+                    "11": {
+                        "alt": "Top View",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-top-view-117.webp"
+                    },
+                    "12": {
+                        "alt": "Wheel",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-wheel-42.webp"
+                    },
+                    "count": 13
+                },
+                "colors": {
+                    "0": {
+                        "alt": "Atlas Black",
+                        "hexcode": "#060606",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Atlas-Black-060606.webp"
+                    },
+                    "1": {
+                        "alt": "Calgary White",
+                        "hexcode": "#D9dbdf",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Calgary-White-d9dbdf.webp"
+                    },
+                    "2": {
+                        "alt": "Creative Ocean",
+                        "hexcode": "#1a5b64",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Creative-Ocean-1a5b64.webp"
+                    },
+                    "3": {
+                        "alt": "Daytona Grey",
+                        "hexcode": "#5d5e60",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Daytona-Grey-5d5e60.webp"
+                    },
+                    "4": {
+                        "alt": "Daytona Grey Dual Tone",
+                        "hexcode": "#5d5e60",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Daytona-Grey-Dual-Tone-5d5e60.webp"
+                    },
+                    "5": {
+                        "alt": "Fearless Purple Dual",
+                        "hexcode": "#Tone",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Fearless-Purple-Dual-Tone.webp"
+                    },
+                    "6": {
+                        "alt": "Flame Red",
+                        "hexcode": "#78312d",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Flame-Red-78312d.webp"
+                    },
+                    "7": {
+                        "alt": "Flame Red Dual Tone",
+                        "hexcode": "#872019",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Flame-Red-Dual-Tone-872019.webp"
+                    },
+                    "8": {
+                        "alt": "Pristine White Dual",
+                        "hexcode": "#Tone",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Pristine-White-Dual-Tone.webp"
+                    },
+                    "9": {
+                        "alt": "Pure",
+                        "hexcode": "#Grey",
+                        "url": "https://motorindia.in/wp-content/uploads/2024/06/Tata-Nexon-Pure-Grey.webp"
+                    },
+                    "count": 10
+                }
+            }
+        }
+    ]
+}

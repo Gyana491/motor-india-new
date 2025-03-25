@@ -1,0 +1,76 @@
+/* Base paragraph styles */
+.wp-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* Preserve WordPress custom classes while enhancing them */
+.wp-content p.my-0 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+/* Heading styles */
+.wp-content h2 {
+  font-weight: 600;
+  color: #111827;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.wp-content h2.mb-2.mt-6 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.wp-content h2.mb-xs.mt-5 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* List styles */
+.wp-content ul.marker\:text-textOff {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.wp-content ul.marker\:text-textOff li {
+  margin-bottom: 0.75rem;
+}
+
+/* Strong text */
+.wp-content strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Links */
+.wp-content a {
+  color: #DC2626;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+
+.wp-content a:hover {
+  text-decoration: underline;
+}
+
+/* Additional spacing for better readability */
+.wp-content > * + * {
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .wp-content h2 {
+    font-size: 1.25rem;
+  }
+  
+  .wp-content h2.mb-xs.mt-5 {
+    font-size: 1.125rem;
+  }
+} 

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default async function BrandPage({ params }) {
   // Await params before destructuring
   const paramsObj = await params;
@@ -50,9 +52,11 @@ export default async function BrandPage({ params }) {
               >
                 <div className="relative aspect-video mb-4 overflow-hidden rounded-lg bg-gray-100">
                   {model.image_url ? (
-                    <img
+                    <Image
                       src={model.image_url}
                       alt={model.image_alt || model.title}
+                      width={800}
+                      height={450}
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform"
                     />
                   ) : (
@@ -95,9 +99,11 @@ export default async function BrandPage({ params }) {
               >
                 <div className="relative aspect-video mb-4 overflow-hidden rounded-lg bg-gray-100">
                   {model.image_url ? (
-                    <img
+                    <Image
                       src={model.image_url}
                       alt={model.image_alt || model.title}
+                      width={800}
+                      height={450}
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform"
                     />
                   ) : (

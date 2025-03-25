@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 // Fetch posts by tag slug
 const getPostsByTag = async (slug) => {
@@ -48,7 +49,7 @@ export default async function TagArchive({ params }) {
     return (
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Tag not found</h1>
-        <p>The tag you're looking for doesn't exist or has been removed.</p>
+        <p>The tag you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         <Link href="/post" className="text-red-600 hover:underline mt-4 inline-block">
           ← Back to all posts
         </Link>
@@ -75,9 +76,11 @@ export default async function TagArchive({ params }) {
               <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                 {post.image_url && (
                   <div className="relative aspect-video overflow-hidden">
-                    <img
+                    <Image
                       src={post.image_url}
                       alt={post.image_alt || post.title}
+                      width={800}
+                      height={450}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -144,4 +147,4 @@ export async function generateMetadata({ params }) {
       type: 'website'
     }
   }
-} 
+}

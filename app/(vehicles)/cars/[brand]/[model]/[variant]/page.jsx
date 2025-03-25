@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default async function VariantDetailPage({ params }) {
   // Await params before destructuring
   const paramsObj = await params;
@@ -83,9 +85,11 @@ export default async function VariantDetailPage({ params }) {
             <div className="order-1 md:order-2 md:w-1/2 w-full">
               {image_url && (
                 <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200">
-                  <img 
+                  <Image 
                     src={image_url} 
                     alt={image_alt || title}
+                    width={800}
+                    height={450}
                     className="w-full h-auto object-cover"
                   />
                 </div>

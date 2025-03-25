@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 const getPosts = async () => {
     const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?_embed=true`)
@@ -34,14 +35,17 @@ const Posts = async () => {
             <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               {post.image_url && (
                 <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={post.image_url}
-                    alt={post.image_alt || post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+                    <Image
+                      src={post.image_url}
+                      alt={post.image_alt || post.title}
+                      width={800}
+                      height={450}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
               )}
               
+
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2 group-hover:text-red-600 transition-colors">
                   {post.title}

@@ -28,7 +28,7 @@ export default async function ThreeSixtyViewPage({ params }) {
     return (
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">360° View not found</h1>
-        <p>Sorry, we couldn't find 360° views for {brand} {model}.</p>
+        <p>Sorry, we couldn&apos;t find 360° views for {brand} {model}.</p>
         <Link href={`/cars/${brand}/${model}`} className="text-red-600 hover:underline">
           Return to {model} Overview
         </Link>
@@ -144,6 +144,14 @@ export default async function ThreeSixtyViewPage({ params }) {
           </Link>
         </div>
       )}
+      {!threeSixtyView.exterior && !threeSixtyView.interior && (
+        <div className="bg-gray-50 p-8 rounded-lg text-center">
+          <p className="text-gray-600">360° views aren&apos;t available yet.</p>
+          <Link href={`/cars/${brand}/${model}`} className="text-red-600 hover:underline mt-4 inline-block">
+            Return to {model} Overview
+          </Link>
+        </div>
+      )}
     </main>
   );
 }
@@ -161,4 +169,4 @@ export async function generateMetadata({ params }) {
       description: `Take a virtual tour of the ${brand} ${model} with our interactive 360° view experience.`
     }
   };
-} 
+}

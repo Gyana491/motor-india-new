@@ -109,11 +109,12 @@ export default async function FeaturesPage({ params }) {
   if (!data || !data.posts || data.posts.length === 0) {
     return (
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-4">Features not found</h1>
-        <p>Sorry, we couldn't find features for {brand} {model}.</p>
-        <Link href={`/cars/${brand}/${model}`} className="text-red-600 hover:underline">
-          Return to {model} Overview
-        </Link>
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <p className="text-gray-600">We couldn&apos;t find any feature information for {brand} {model}.</p>
+            <Link href={`/cars/${brand}/${model}`} className="text-red-600 hover:underline mt-4 inline-block">
+              Return to {model} Overview
+            </Link>
+          </div>
       </main>
     );
   }
@@ -314,4 +315,4 @@ export async function generateMetadata({ params }) {
       description: `Complete list of features and equipment available on the ${brand} ${model}.`
     }
   };
-} 
+}

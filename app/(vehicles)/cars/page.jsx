@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const getAllBrands = async () => {
   const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?per_page=100`, {
     next: { revalidate: 3600 } // Cache for 1 hour
@@ -26,9 +28,11 @@ export default async function Cars() {
           >
             {/* Use a fallback image or brand initial if no logo is available */}
             {brand.acf?.featured_image ? (
-              <img 
+              <Image 
                 src={brand.acf.featured_image} 
                 alt={brand.name}
+                width={96}
+                height={96}
                 className="w-24 h-24 object-contain mx-auto mb-4"
               />
             ) : (
@@ -56,4 +60,4 @@ export async function generateMetadata() {
       type: 'website',
     }
   }
-} 
+}

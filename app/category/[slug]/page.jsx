@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 // Fetch posts by category slug
 const getPostsByCategory = async (slug) => {
@@ -48,7 +49,7 @@ export default async function CategoryArchive({ params }) {
     return (
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Category not found</h1>
-        <p>The category you're looking for doesn't exist or has been removed.</p>
+        <p>The category you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         <Link href="/post" className="text-red-600 hover:underline mt-4 inline-block">
           ← Back to all posts
         </Link>
@@ -58,10 +59,10 @@ export default async function CategoryArchive({ params }) {
   
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Category: {category.name}</h1>
+      <h1 className="text-3xl font-bold mb-4">{category.name}</h1>
       
       {category.description && (
-        <p className="text-gray-600 mb-6">{category.description}</p>
+        <p className="text-gray-600 mb-6">Sorry, we couldn&apos;t find any posts in this category.</p>
       )}
       
       {posts.length > 0 ? (
@@ -75,66 +76,22 @@ export default async function CategoryArchive({ params }) {
               <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                 {post.image_url && (
                   <div className="relative aspect-video overflow-hidden">
-                    <img
+                    <Image
                       src={post.image_url}
                       alt={post.image_alt || post.title}
+                      width={800}
+                      height={450}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 )}
-                
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2 group-hover:text-red-600 transition-colors">
-                    {post.title}
-                  </h2>
-                  
-                  {post.excerpt && (
-                    <p className="text-gray-600 mb-3 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  
-                  <div className="flex items-center text-sm text-gray-500">
-                    {post.date && (
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
-                    )}
-                  </div>
-                </div>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <p className="text-gray-600">No posts found in this category.</p>
+        <p className="text-gray-600 mb-6">No posts found in this category.</p>
       )}
-      
-      <Link href="/post" className="text-red-600 hover:underline mt-8 inline-block">
-        ← Back to all posts
-      </Link>
     </main>
   )
 }
-
-// Generate metadata for SEO
-export async function generateMetadata({ params }) {
-  const resolvedParams = await params;
-  const slug = resolvedParams.slug;
-  const category = await getCategoryDetails(slug);
-  
-  if (!category) {
-    return {
-      title: 'Category Not Found',
-      description: 'The requested category could not be found.'
-    }
-  }
-  
-  return {
-    title: `${category.name} - Posts Archive`,
-    description: category.description || `Browse all posts in the ${category.name} category.`,
-    openGraph: {
-      title: `${category.name} - Posts Archive`,
-      description: category.description || `Browse all posts in the ${category.name} category.`,
-      type: 'website'
-    }
-  }
-} 

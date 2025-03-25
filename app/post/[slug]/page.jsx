@@ -70,7 +70,7 @@ export default async function SinglePost({ params }) {
     return (
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Post not found</h1>
-        <p>The post you're looking for doesn't exist or has been removed.</p>
+        <p>Sorry, we couldn&apos;t find the post you&apos;re looking for.</p>
         <Link href="/post" className="text-red-600 hover:underline mt-4 inline-block">
           ← Back to all posts
         </Link>
@@ -120,10 +120,12 @@ export default async function SinglePost({ params }) {
           {post.author && (
             <div className="flex items-center mb-8">
               {post.author.avatar && (
-                <img 
+                <Image 
                   src={post.author.avatar} 
                   alt={post.author.name}
-                  className="w-10 h-10 rounded-full mr-3"
+                  width={40}
+                  height={40}
+                  className="rounded-full mr-3"
                 />
               )}
               <span className="font-medium">By {post.author.name}</span>
@@ -133,9 +135,11 @@ export default async function SinglePost({ params }) {
           {/* Featured image */}
           {post.image_url && (
             <div className="mb-8">
-              <img
+              <Image
                 src={post.image_url}
                 alt={post.image_alt || post.title}
+                width={1200}
+                height={675}
                 className="w-full h-auto rounded-lg"
               />
             </div>
@@ -166,9 +170,11 @@ export default async function SinglePost({ params }) {
                     <div className="flex items-start gap-3">
                       {recentPost.image_url && (
                         <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded">
-                          <img
+                          <Image
                             src={recentPost.image_url}
                             alt=""
+                            width={80}
+                            height={80}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
@@ -240,4 +246,4 @@ export async function generateMetadata({ params }) {
       tags: post.categories.map(cat => cat.name)
     }
   }
-} 
+}

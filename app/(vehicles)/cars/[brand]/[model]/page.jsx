@@ -40,7 +40,7 @@ export default async function ModelPage({ params }) {
     return (
       <main>
         <h1 className="text-2xl font-bold mb-4">Car model not found</h1>
-        <p>Sorry, we couldn't find information for {brand} {model}.</p>
+      <p>Sorry, we couldn&apos;t find information for {brand} {model}.</p>
         <Link href="/cars" className="text-red-600 hover:underline">
           Browse all cars
         </Link>
@@ -286,30 +286,29 @@ export async function generateMetadata({ params }) {
     const { 
       title = `${brand} ${model}`,
       body_type = "Car",
-      price = {}
-    } = modelData;
-    
+      price = {},
+      image_url
+    } = modelData || {};
+
+    // Format the price range for description
+    const priceDescription = price.min_price_formatted && price.max_price_formatted 
+      ? `Price range: ${price.min_price_formatted} - ${price.max_price_formatted}` 
+      : '';
+
     return {
-      title: `${title} Price, Variants, Features & Specifications | Motor India`,
-      description: `${title} price starts at ${price.min_price_formatted}. Check ${title} variants, specifications, features, images & more at Motor India.`,
+      title: `${title} Price, Features & Specifications | Motor India`,
+      description: `Explore ${title} ${body_type} features, specifications, colors, variants, and price. ${priceDescription}. Find the best deals on ${brand} ${model}.`,
       openGraph: {
         title: `${title} - ${body_type}`,
-        description: `Explore the ${title} - Price range: ${price.min_price_formatted} - ${price.max_price_formatted}`,
-        images: [
-          {
-            url: modelData.image_url || '/default-car-image.jpg',
-            width: 1200,
-            height: 630,
-            alt: modelData.image_alt || title
-          }
-        ]
+        description: `Explore ${title} ${body_type} features, specifications, colors, variants, and price. ${priceDescription}.`,
+        images: image_url ? [{ url: image_url }] : []
       }
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Car Details | Motor India",
-      description: "Explore car details, specifications, and features."
+      title: "Error",
+      description: "An error occurred while generating metadata."
     };
   }
 }

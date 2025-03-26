@@ -50,7 +50,7 @@ export default async function CategoryArchive({ params }) {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Category not found</h1>
         <p>The category you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <Link href="/post" className="text-red-600 hover:underline mt-4 inline-block">
+        <Link href="/articles" className="text-red-600 hover:underline mt-4 inline-block">
           ← Back to all posts
         </Link>
       </main>
@@ -70,7 +70,7 @@ export default async function CategoryArchive({ params }) {
           {posts.map(post => (
             <Link 
               key={post.id} 
-              href={`/post/${post.slug}`}
+              href={`/articles/${post.slug}`}
               className="group"
             >
               <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">

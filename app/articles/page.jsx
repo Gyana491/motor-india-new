@@ -29,7 +29,7 @@ const Posts = async () => {
         {posts.map(post => (
           <Link 
             key={post.id} 
-            href={`/post/${post.slug}`}
+            href={`/articles/${post.slug}`}
             className="group"
           >
             <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">

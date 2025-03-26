@@ -71,7 +71,7 @@ export default async function SinglePost({ params }) {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Post not found</h1>
         <p>Sorry, we couldn&apos;t find the post you&apos;re looking for.</p>
-        <Link href="/post" className="text-red-600 hover:underline mt-4 inline-block">
+        <Link href="/articles" className="text-red-600 hover:underline mt-4 inline-block">
           ← Back to all posts
         </Link>
       </main>
@@ -84,7 +84,7 @@ export default async function SinglePost({ params }) {
         {/* Main content */}
         <main className="lg:w-2/3">
           {/* Back button */}
-          <Link href="/post" className="text-red-600 hover:underline mb-6 inline-block">
+          <Link href="/articles" className="text-red-600 hover:underline mb-6 inline-block">
             ← Back to all posts
           </Link>
           
@@ -164,7 +164,7 @@ export default async function SinglePost({ params }) {
                 {recentPosts.map(recentPost => (
                   <Link 
                     key={recentPost.id} 
-                    href={`/post/${recentPost.slug}`}
+                    href={`/articles/${recentPost.slug}`}
                     className="group block"
                   >
                     <div className="flex items-start gap-3">
@@ -203,7 +203,7 @@ export default async function SinglePost({ params }) {
               <p className="text-gray-500">No recent posts available.</p>
             )}
             
-            <Link href="/post" className="text-red-600 hover:underline text-sm mt-4 inline-block">
+            <Link href="/articles" className="text-red-600 hover:underline text-sm mt-4 inline-block">
               View all posts →
             </Link>
           </div>

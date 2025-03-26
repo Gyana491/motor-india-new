@@ -1,4 +1,4 @@
-import SinglePost from "./post/page";
+import SinglePost from "./articles/page";
 
 export default function Home() {
 

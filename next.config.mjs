@@ -13,6 +13,24 @@ const nextConfig = {
                 hostname: 'img.youtube.com',
                 port: '',
                 pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'i.ytimg.com',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 's.gravatar.com',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'secure.gravatar.com',
+                port: '',
+                pathname: '/**'
             }
         ]
       },

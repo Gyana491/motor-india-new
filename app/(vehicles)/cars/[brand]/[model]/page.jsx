@@ -120,8 +120,7 @@ export default async function ModelPage({ params }) {
   }
   
   return (
-    <div className="container mx-auto p-4">
-
+    <div className="container mx-auto p">
       {/* Hero Section with Gallery Slider */}
       <div className="bg-gradient-to-br from-white to-gray-100 rounded-2xl p-2 mb-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

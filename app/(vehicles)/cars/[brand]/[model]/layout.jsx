@@ -5,7 +5,7 @@ export default async function ModelLayout({ children, params }) {
 
   return (
     <div className="container mx-auto px-4 ">
-            <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md py-4 px-4 -mx-4 mb-8 border-b overflow-x-auto">
+            <nav className="sticky top-0 bg-white/80 backdrop-blur-md py-4 px-4 -mx-4  border-b overflow-x-auto">
               <div className="flex gap-3 min-w-max">
                 {[
                   { name: 'Overview', path: '' },

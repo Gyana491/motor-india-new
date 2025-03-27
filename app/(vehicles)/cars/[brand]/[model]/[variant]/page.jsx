@@ -77,7 +77,7 @@ export default async function VariantDetailPage({ params }) {
     }, {});
 
     return (
-      <main className="container mx-auto px-4 md:px-6 py-8 md:py-10">
+      <main className="container mx-auto md:px-6  md:py-10">
         {/* Hero Section */}
         <div className="bg-gradient-to-br from-white to-gray-100 border border-gray-200 rounded-2xl p-4 md:p-8 shadow-lg mb-12">
           <div className="flex flex-col md:flex-row items-center gap-8">

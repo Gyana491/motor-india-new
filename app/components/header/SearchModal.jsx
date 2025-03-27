@@ -23,10 +23,7 @@ const SearchModal = ({ isOpen, onClose }) => {
             <SearchBar 
               className="rounded-[4px]"
               autoFocus={true}
-              onSearch={() => {
-                // Handle search
-                onClose();
-              }}
+              onClose={onClose}
             />
           </div>
         </div>
@@ -34,4 +31,4 @@ const SearchModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default SearchModal; 
+export default SearchModal;

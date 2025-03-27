@@ -1,5 +1,8 @@
 import { BACKEND } from '@/utils/constants';
 
+// Add this line to prevent static generation at build time
+export const dynamic = 'force-dynamic';
+
 async function getAllProducts() {
   let allProducts = [];
   let page = 1;

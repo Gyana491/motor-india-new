@@ -1,8 +1,5 @@
-/**
- * Fetches all products recursively with pagination
- * @returns {Promise<Array>} - All products from all pages
- */
 import { BACKEND } from '@/utils/constants';
+
 async function getAllProducts() {
   let allProducts = [];
   let page = 1;
@@ -39,28 +36,39 @@ async function getAllProducts() {
   return allProducts;
 }
 
-export default async function sitemap() {
+export async function GET() {
   try {
     const products = await getAllProducts();
 
-    const urls = products.map(product => {
-      const make = product.make?.toLowerCase().replace(/\s+/g, '-') || '';
-      const model = product.model?.toLowerCase().replace(/\s+/g, '-') || '';
-      const variant = product.variant?.toLowerCase().replace(/\s+/g, '-') || '';
+    // Create XML content
+    const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${products.map(product => {
+    const make = product.make?.toLowerCase().replace(/\s+/g, '-') || '';
+    const model = product.model?.toLowerCase().replace(/\s+/g, '-') || '';
+    const variant = product.variant?.toLowerCase().replace(/\s+/g, '-') || '';
+    
+    if (!make || !model || !variant) return '';
+    
+    return `
+  <url>
+    <loc>https://motorindia.in/cars/${make}/${model}/${variant}/</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+  }).join('')}
+</urlset>`;
 
-      if (!make || !model || !variant) return null;
-
-      return {
-        url: `https://motorindia.in/cars/${make}/${model}/${variant}/`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.8
-      };
-    }).filter(Boolean);
-
-    return urls;
+    // Return XML response with appropriate headers
+    return new Response(xmlContent, {
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+      }
+    });
   } catch (error) {
     console.error('Error generating sitemap:', error);
-    return [];
+    return new Response('Error generating sitemap', { status: 500 });
   }
 }

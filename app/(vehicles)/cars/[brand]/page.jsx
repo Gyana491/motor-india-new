@@ -1,34 +1,34 @@
 import Image from 'next/image';
 
+// Shared fetch functions to be used by both page and metadata
+async function getBrandDetails(brand) {
+  const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?slug=${brand}`, {
+    next: { revalidate: 3600 } // Revalidate every hour
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch brand details: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+async function getBrandModels(brand) {
+  const response = await fetch(`${process.env.BACKEND}/wp-json/api/cars?brand=${brand}`, {
+    next: { revalidate: 3600 } // Cache for 1 hour
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch brand models: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
 export default async function BrandPage({ params }) {
-  // Await params before destructuring
   const paramsObj = await params;
   const { brand } = paramsObj;
 
-  const getBrandDetails = async () => {
-    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?slug=${brand}`, {
-      next: { revalidate: 3600 } // Revalidate every hour
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch brand details: ${response.status}`);
-    }
-    
-    return response.json();
-  };
-
-  const getBrandModels = async (brand) => {
-    const response = await fetch(`${process.env.BACKEND}/wp-json/api/cars?brand=${brand}`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch brand models: ${response.status}`);
-    }
-    
-    return response.json(); // API now returns array directly
-  };
-  
   const models = await getBrandModels(brand);
   
   // Separate models into current and upcoming
@@ -137,4 +137,47 @@ export default async function BrandPage({ params }) {
       )}
     </main>
   );
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }) {
+  try {
+    const { brand } = await params;
+    const brandData = await getBrandDetails(brand);
+    const models = await getBrandModels(brand);
+
+    if (!brandData.length) {
+      return {
+        title: 'Brand Not Found',
+        description: 'The requested car brand could not be found.'
+      };
+    }
+
+    const brandInfo = brandData[0];
+    const currentModels = models.filter(model => model.is_launched !== "0");
+    const upcomingModels = models.filter(model => model.is_launched === "0");
+
+    const modelCount = currentModels.length;
+    const upcomingCount = upcomingModels.length;
+    const priceRange = currentModels.length > 0 ? 
+      `${currentModels[0]?.price?.min_price_formatted} - ${currentModels[0]?.price?.max_price_formatted}` : '';
+
+    return {
+      title: `${brandInfo.title.rendered} Cars in India ${new Date().getFullYear()} - Models, Prices & More`,
+      description: `Explore ${brandInfo.title.rendered} cars in India. ${modelCount} models available${upcomingCount ? ` and ${upcomingCount} upcoming` : ''}. ${priceRange ? `Price range: ${priceRange}.` : ''} View specifications, features, images & dealers.`,
+      openGraph: {
+        title: `${brandInfo.title.rendered} Cars - Complete Model Lineup ${new Date().getFullYear()}`,
+        description: `Discover the complete range of ${brandInfo.title.rendered} cars in India. Compare prices, specifications, and features across all ${brandInfo.title.rendered} models.`,
+        type: 'website',
+        images: brandInfo.acf?.brand_logo ? [{ url: brandInfo.acf.brand_logo }] : []
+      },
+      keywords: `${brandInfo.title.rendered} cars, ${brandInfo.title.rendered} price, ${brandInfo.title.rendered} models, new ${brandInfo.title.rendered} cars`
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Car Brand Details",
+      description: "Explore car models, specifications, and prices"
+    };
+  }
 }

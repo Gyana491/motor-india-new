@@ -10,7 +10,9 @@ async function getAllProducts() {
 
   while (hasMoreProducts) {
     try {
-      const response = await fetch(`${BACKEND || process.env.BACKEND}/wp-admin/admin-ajax.php?action=get_all_products_json&page=${page}&per_page=20`);
+      const response = await fetch(`${BACKEND || process.env.BACKEND}/wp-admin/admin-ajax.php?action=get_all_products_json&page=${page}&per_page=20`,{
+        next: { revalidate: 86400 } // Revalidate every day
+      });
 
       if (!response.ok) {
         if (response.status === 400 || response.status === 404) {

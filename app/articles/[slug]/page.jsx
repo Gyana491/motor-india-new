@@ -5,9 +5,7 @@ import "./post-styles.css" // Import CSS file for styling
 // Fetch a single post by slug
 const getPost = async (slug) => {
   const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?slug=${slug}&_embed=true`, {
-    // next: { revalidate: 3600 } // Cache for 1 hour
-    next: { revalidate: 0 }
-
+    next: { revalidate: 300 } // Cache for 5 minutes
   })
   const posts = await response.json()
   

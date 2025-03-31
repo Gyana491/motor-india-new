@@ -10,9 +10,12 @@ import ThreeSixtyViewer from './components/ThreeSixtyViewer';
 
 async function getModelDetails(brand, model) {
   try {
-    // Using local response.json file for now
     const slug = `${brand}-${model}`.toLowerCase().replace(/\s+/g, '-');
-    const response = await fetch(`${process.env.BACKEND}/wp-json/api/car?slug=${slug}`);
+    const response = await fetch(`${process.env.BACKEND}/wp-json/api/car?slug=${slug}`, {
+      next: { 
+        revalidate: 600 // Revalidate every 10 minutes
+      }
+    });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.status}`);
@@ -21,7 +24,6 @@ async function getModelDetails(brand, model) {
     return await response.json();
   } catch (error) {
     console.error("Error fetching car details:", error);
-    // Return fallback data structure
     return { posts: [] };
   }
 }

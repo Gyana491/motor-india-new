@@ -153,21 +153,21 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
       />
       
       {/* Desktop Modal */}
-      <div className="hidden md:flex relative w-full min-h-screen items-start justify-center p-4">
-        <div className={`bg-white rounded-xl shadow-xl transform transition-all duration-300 ${
+      <div className="hidden md:flex relative w-full min-h-screen items-center justify-center p-4">
+        <div className={`bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] transform transition-all duration-300 w-[800px] ${
           isOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
         }`}>
-          <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className="p-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">
-                Select Location
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-2xl font-semibold text-gray-900">
+                Select Your Location
               </h3>
               <button
                 onClick={onClose}
-                className="p-1 text-gray-400 hover:text-gray-500"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
-                <BiX className="w-6 h-6" />
+                <BiX className="w-7 h-7" />
               </button>
             </div>
 
@@ -175,59 +175,60 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
             <button
               onClick={handleAutoDetectLocation}
               disabled={isDetectingLocation}
-              className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-[4px] text-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF3B30] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full mb-6 flex items-center justify-center gap-3 px-6 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF3B30] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              <BiCurrentLocation className={`${isDetectingLocation ? 'animate-spin' : ''}`} />
+              <BiCurrentLocation className={`w-5 h-5 ${isDetectingLocation ? 'animate-spin' : ''}`} />
               {isDetectingLocation ? 'Detecting Location...' : 'Auto Detect Location'}
             </button>
 
             {/* Search input */}
-            <div className="relative mb-4">
-              <BiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <div className="relative mb-8">
+              <BiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search state or city..."
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-[4px] text-sm focus:outline-none focus:ring-2 focus:ring-[#FF3B30] focus:border-transparent"
+                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-[#FF3B30] focus:border-transparent transition-all"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               {isLoading && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="w-4 h-4 border-2 border-gray-300 border-t-[#FF3B30] rounded-full animate-spin"></div>
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <div className="w-5 h-5 border-2 border-gray-300 border-t-[#FF3B30] rounded-full animate-spin"></div>
                 </div>
               )}
             </div>
+
             {selectedCity && selectedState && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-500 mb-3 px-3">Selected Location</h4>
-                <div className="flex items-center gap-3 p-3 bg-red-50 text-red-600 rounded-[4px]">
-                  <IoLocationSharp className="flex-shrink-0 text-red-600" />
-                  <span className="text-sm">{`${selectedCity}, ${selectedState}`}</span>
+              <div className="mb-8">
+                <h4 className="text-base font-medium text-gray-600 mb-4">Selected Location</h4>
+                <div className="flex items-center gap-3 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">
+                  <IoLocationSharp className="flex-shrink-0 text-red-600 w-5 h-5" />
+                  <span className="text-base font-medium">{`${selectedCity}, ${selectedState}`}</span>
                 </div>
               </div>
             )}
 
             {/* Popular Cities */}
             {!searchQuery && (
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-500 mb-3 px-3">Popular Cities</h4>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="mb-8">
+                <h4 className="text-base font-medium text-gray-600 mb-4">Popular Cities</h4>
+                <div className="grid grid-cols-3 gap-3">
                   {popularCities.map(({ state, city }) => (
                     <button
                       key={`popular-${state}-${city}`}
                       onClick={() => handleLocationSelect(state, city)}
-                      className={`flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-[4px] transition-colors ${
+                      className={`flex items-center gap-3 p-4 text-left hover:bg-gray-50 rounded-xl border transition-all ${
                         selectedState === state && selectedCity === city
-                          ? 'bg-red-50 text-red-600'
-                          : ''
+                          ? 'bg-red-50 text-red-600 border-red-200'
+                          : 'border-gray-200'
                       }`}
                     >
-                      <IoLocationSharp className={`flex-shrink-0 ${
+                      <IoLocationSharp className={`flex-shrink-0 w-5 h-5 ${
                         selectedState === state && selectedCity === city
                           ? 'text-red-600'
                           : 'text-gray-400'
                       }`} />
-                      <span className="text-sm">{city}</span>
+                      <span className="text-base font-medium">{city}</span>
                     </button>
                   ))}
                 </div>
@@ -235,36 +236,36 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
             )}
 
             {/* Search Results */}
-            <div className="max-h-[400px] overflow-y-auto">
-              <div className="space-y-4">
+            <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
+              <div className="space-y-6">
                 {searchQuery.length >= 2 ? (
                   Object.entries(groupedSuggestions).map(([state, cities]) => (
-                    <div key={state} className="space-y-2">
-                      <h4 className="text-sm font-medium text-gray-500 px-3">{state}</h4>
-                      <div className="grid grid-cols-2 gap-2">
+                    <div key={state} className="space-y-3">
+                      <h4 className="text-base font-medium text-gray-600">{state}</h4>
+                      <div className="grid grid-cols-3 gap-3">
                         {cities.map((city) => (
                           <button
                             key={`${state}-${city}`}
                             onClick={() => handleLocationSelect(state, city)}
-                            className={`flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-[4px] transition-colors ${
+                            className={`flex items-center gap-3 p-4 text-left hover:bg-gray-50 rounded-xl border transition-all ${
                               selectedState === state && selectedCity === city
-                                ? 'bg-red-50 text-red-600'
-                                : ''
+                                ? 'bg-red-50 text-red-600 border-red-200'
+                                : 'border-gray-200'
                             }`}
                           >
-                            <IoLocationSharp className={`flex-shrink-0 ${
+                            <IoLocationSharp className={`flex-shrink-0 w-5 h-5 ${
                               selectedState === state && selectedCity === city
                                 ? 'text-red-600'
                                 : 'text-gray-400'
                             }`} />
-                            <span className="text-sm">{city}</span>
+                            <span className="text-base font-medium">{city}</span>
                           </button>
                         ))}
                       </div>
                     </div>
                   ))
                 ) : searchQuery.length > 0 ? (
-                  <p className="text-sm text-gray-500 text-center py-4">Type at least 2 characters to search</p>
+                  <p className="text-base text-gray-500 text-center py-4">Type at least 2 characters to search</p>
                 ) : null}
               </div>
             </div>
@@ -409,6 +410,20 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
         }
         .safe-bottom {
           padding-bottom: env(safe-area-inset-bottom);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #ddd;
+          border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #ccc;
         }
       `}</style>
     </div>

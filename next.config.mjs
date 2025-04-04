@@ -34,6 +34,16 @@ const nextConfig = {
             }
         ]
       },
+    
+    async rewrites() {
+    return [
+        {
+        source: "/cars/:brand/:model/price-in-:city",
+        destination: "/cars/:brand/:model/price-in/:city",
+        },
+    ];
+    },
+
 };
 
 export default nextConfig;

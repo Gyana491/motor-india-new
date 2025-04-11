@@ -19,3 +19,18 @@ export async function getModelDetails(brand, model) {
   return data
 } 
 
+
+
+export async function getFeaturedImage(imageId) {
+  const url = `${process.env.BACKEND}/wp-json/wp/v2/media/${imageId}`;
+  const response = await fetch(url, {
+    next: { revalidate: 3600 }
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const data = await response.json();
+  return data.source_url;
+}

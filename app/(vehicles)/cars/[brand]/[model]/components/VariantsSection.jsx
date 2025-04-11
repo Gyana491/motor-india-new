@@ -85,7 +85,7 @@ export default function VariantsSection({ variants, brand, model }) {
                 href={`/cars/${brand}/${model}/${(variant.variant_name).toLowerCase().replace(/\s+/g, '-')}`}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               >
-                <h3 className="font-semibold mb-2">{variant['variant-name'] || 'Variant'}</h3>
+                <h3 className="font-semibold mb-2">{variant['variant-name'] || variant.name || 'Variant'}</h3>
                 <div className="space-y-2">
                   <p className="text-red-600 font-bold">₹ {((variant.price || 0) / 100000).toFixed(2)} Lakh*</p>
                   <div className="flex gap-2">

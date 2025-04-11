@@ -171,6 +171,17 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
               </button>
             </div>
 
+            
+            {selectedCity && selectedState && (
+              <div className="mb-8">
+                <h4 className="text-base font-medium text-gray-600 mb-4">Selected Location</h4>
+                <div className="flex items-center gap-3 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">
+                  <IoLocationSharp className="flex-shrink-0 text-red-600 w-5 h-5" />
+                  <span className="text-base font-medium">{`${selectedCity}, ${selectedState}`}</span>
+                </div>
+              </div>
+            )}
+
             {/* Auto-detect button */}
             <button
               onClick={handleAutoDetectLocation}
@@ -198,15 +209,6 @@ const LocationModal = ({ isOpen, onClose, onSelect }) => {
               )}
             </div>
 
-            {selectedCity && selectedState && (
-              <div className="mb-8">
-                <h4 className="text-base font-medium text-gray-600 mb-4">Selected Location</h4>
-                <div className="flex items-center gap-3 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">
-                  <IoLocationSharp className="flex-shrink-0 text-red-600 w-5 h-5" />
-                  <span className="text-base font-medium">{`${selectedCity}, ${selectedState}`}</span>
-                </div>
-              </div>
-            )}
 
             {/* Popular Cities */}
             {!searchQuery && (

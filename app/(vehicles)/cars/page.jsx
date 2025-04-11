@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { getFeaturedImage } from '@/app/lib/api';
 
 const getAllBrands = async () => {
   const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?per_page=100`, {
@@ -16,20 +17,37 @@ const getAllBrands = async () => {
 export default async function Cars() {
   const brands = await getAllBrands()
 
+  // Fetch featured images for each brand
+  const brandsWithImages = await Promise.all(
+    brands.map(async (brand) => {
+      let imageUrl = null;
+      
+      // Check if we have a featured_image (which contains the ID)
+      if (brand.acf?.featured_image) {
+        imageUrl = await getFeaturedImage(brand.acf.featured_image);
+      }
+      
+      return {
+        ...brand,
+        featuredImageUrl: imageUrl
+      };
+    })
+  );
+
   return (
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">New Cars</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {brands.map(brand => (
+        {brandsWithImages.map(brand => (
           <a 
             key={brand.id}
             href={`/cars/${brand.slug}`}
             className="p-4 border rounded-lg hover:shadow-lg transition-shadow"
           >
             {/* Use a fallback image or brand initial if no logo is available */}
-            {brand.acf?.featured_image ? (
+            {brand.featuredImageUrl ? (
               <Image 
-                src={brand.acf.featured_image} 
+                src={brand.featuredImageUrl} 
                 alt={brand.name}
                 width={96}
                 height={96}

@@ -149,7 +149,7 @@ export default async function BrandPage({ params }) {
                       src={brandLogo}
                       alt={`${brandInfo.name} Logo`}
                       fill
-                      className="object-contain p-2"
+                      className="object-contain p-4 rounded-full"
                       priority
                     />
                   </div>
@@ -693,8 +693,12 @@ export async function generateMetadata({ params }) {
     // Enhanced meta description
     const metaDescription = `Explore ${brandInfo.name} cars in India ${new Date().getFullYear()}. 
       ${modelCount} models available${upcomingCount ? ` and ${upcomingCount} upcoming` : ''}. 
-      ${priceRange ? `Price range: ${priceRange}.` : ''} 
+      ${ priceRange? `Price range: ${priceRange}.` : ''} 
       Find specifications, features, images & dealers of ${brandInfo.name} cars.`.replace(/\s+/g, ' ').trim();
+
+    // Generate canonical URL
+    const canonicalUrl = new URL(`/cars/${brand}`, process.env.NEXT_PUBLIC_FRONTEND).toString();
+
 
     return {
       title: `${brandInfo.name} Cars in India ${new Date().getFullYear()} - Models, Prices & More`,
@@ -703,9 +707,13 @@ export async function generateMetadata({ params }) {
         title: `${brandInfo.name} Cars - Complete Model Lineup ${new Date().getFullYear()}`,
         description: metaDescription,
         type: 'website',
-        images: brandInfo.acf?.featured_image ? [{ url: await getFeaturedImage(brandInfo.acf.featured_image) }] : []
+        images: brandInfo.acf?.featured_image ? [{ url: await getFeaturedImage(brandInfo.acf.featured_image) }] : [],
+        url: canonicalUrl
       },
-      keywords: `${brandInfo.name} cars, ${brandInfo.name} price, ${brandInfo.name} models, new ${brandInfo.name} cars, ${brandInfo.name} ${new Date().getFullYear()}`
+      keywords: `${brandInfo.name} cars, ${brandInfo.name} price, ${brandInfo.name} models, new ${brandInfo.name} cars, ${brandInfo.name} ${new Date().getFullYear()}`,
+      alternates: {
+        canonical: canonicalUrl
+      }
     };
   } catch (error) {
     console.error("Error generating metadata:", error);

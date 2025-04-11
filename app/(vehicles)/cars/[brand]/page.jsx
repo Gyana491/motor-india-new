@@ -261,7 +261,7 @@ export default async function BrandPage({ params }) {
                 {upcomingModels.length > 0 && (
                   <div className="mb-6">
                     <h3 className="text-xl font-semibold mb-3 text-gray-800">Upcoming {brandInfo.name} Cars</h3>
-                    <p className="leading-relaxed">{brandInfo.name} has {upcomingModels.length} upcoming cars in India, including {upcomingModels.slice(0, 2).map(m => m.title).join(', ')}{upcomingModels.length > 2 ? ' and more' : ''}. These new launches are expected to strengthen {brandInfo.name}'s position in the Indian market.</p>
+                    <p className="leading-relaxed">{brandInfo.name} has {upcomingModels.length} upcoming cars in India, including {upcomingModels.slice(0, 2).map(m => m.title).join(', ')}{upcomingModels.length > 2 ? ' and more' : ''}. These new launches are expected to strengthen {brandInfo.name}&apos;s position in the Indian market.</p>
                   </div>
                 )}
               </div>

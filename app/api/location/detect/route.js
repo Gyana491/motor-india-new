@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import getAllCities from '@/data/getAllCities';
 
+// Mark as dynamic route since we're using request.url
+export const dynamic = 'force-dynamic';
+
 // Haversine formula to calculate distance between two coordinates
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Earth's radius in km

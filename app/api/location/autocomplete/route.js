@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import getAllCities from '@/data/getAllCities';
 
+// Mark as dynamic route since we're using request.url
+export const dynamic = 'force-dynamic';
+
 // Cache cities data
 let citiesCache = null;
 let lastCacheTime = 0;

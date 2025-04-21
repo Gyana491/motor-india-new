@@ -5,8 +5,6 @@ import Link from 'next/link';
 
 // Fullscreen Modal Component with touch-friendly controls
 const FullscreenModal = ({ isOpen, onClose, children, title }) => {
-  if (!isOpen) return null;
-  
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -16,6 +14,8 @@ const FullscreenModal = ({ isOpen, onClose, children, title }) => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  if (!isOpen) return null;
   
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center touch-none">

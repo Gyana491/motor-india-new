@@ -13,7 +13,8 @@ export default async function ModelLayout({ children, params }) {
                   { name: 'Colors', path: 'colors' },
                   { name: 'Specifications', path: 'specifications' },
                   { name: 'Features', path: 'features' },
-                  { name: 'Images', path: 'images' }
+                  { name: 'Images', path: 'images' },
+                  { name: '360 View', path: '360-view' },
                 ].map(section => (
                   <Link
                     key={section.path}

@@ -1,142 +1,119 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
-export default function ThreeSixtyViewer({ 
-  threeSixtyView, 
-  title, 
-  brand, 
-  model, 
-  isFullPage = false 
-}) {
+export default function ThreeSixtyViewer({ threeSixtyView, title = '', size = 'large' }) {
   const [activeView, setActiveView] = useState('exterior');
+  const [deviceType, setDeviceType] = useState('desktop');
   
   const hasExterior = !!threeSixtyView?.exterior;
   const hasInterior = !!threeSixtyView?.interior;
-  const has360View = hasExterior || hasInterior;
   
-  // Use useEffect to handle initial view selection based on available views
+  // Set initial active view based on available content
   useEffect(() => {
     if (!hasExterior && hasInterior) {
       setActiveView('interior');
-    } else if (hasExterior) {
-      setActiveView('exterior');
     }
+    
+    // Detect device type for optimized instructions
+    const detectDeviceType = () => {
+      const ua = navigator.userAgent;
+      if (/Mobi|Android|iPhone/i.test(ua)) {
+        setDeviceType('mobile');
+      } else if (/iPad|Tablet/i.test(ua)) {
+        setDeviceType('tablet');
+      } else {
+        setDeviceType('desktop');
+      }
+    };
+    
+    detectDeviceType();
   }, [hasExterior, hasInterior]);
   
-  if (!has360View) {
-    return (
-      <div className="bg-gray-50 p-8 rounded-lg text-center">
-        <p className="text-gray-600">360° views are currently unavailable.</p>
-      </div>
-    );
-  }
+  // Generate size-specific classes based on the size prop
+  const containerClasses = {
+    small: "max-w-[320px]",
+    medium: "max-w-[480px]",
+    large: "w-full max-w-none"
+  };
+  
+  const aspectRatioClasses = {
+    small: "aspect-[4/3]", 
+    medium: "aspect-[16/10]",
+    large: "aspect-[16/9]"
+  };
+  
+  const currentViewSrc = activeView === 'exterior' ? threeSixtyView?.exterior : threeSixtyView?.interior;
+  const viewerTitle = activeView === 'exterior' 
+    ? `${title} Exterior 360° View` 
+    : `${title} Interior 360° View`;
   
   return (
-    <div className="w-full">
-      {/* Navigation Tabs - Only show if both views are available */}
+    <div className={`w-full ${containerClasses[size] || containerClasses.large}`}>
+      {/* Tabs - Only show if both views are available */}
       {hasExterior && hasInterior && (
-        <div className="mb-6 flex border-b border-gray-200">
+        <div className="mb-2 flex w-full rounded-t-lg overflow-hidden border border-b-0 border-gray-200">
           <button 
-            className={`py-3 px-6 border-b-2 font-medium transition-colors ${
+            className={`flex-1 py-2 sm:py-2.5 text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeView === 'exterior' 
-                ? 'border-red-600 text-red-600' 
-                : 'border-transparent hover:text-red-600'
+                ? 'bg-red-600 text-white' 
+                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
             }`}
             onClick={() => setActiveView('exterior')}
-            aria-selected={activeView === 'exterior'}
-            role="tab"
           >
-            Exterior View
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span className="hidden xxs:inline">Exterior</span>
+            <span className="xxs:hidden">Ext</span>
           </button>
           <button 
-            className={`py-3 px-6 border-b-2 font-medium transition-colors ${
+            className={`flex-1 py-2 sm:py-2.5 text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeView === 'interior' 
-                ? 'border-red-600 text-red-600' 
-                : 'border-transparent hover:text-red-600'
+                ? 'bg-red-600 text-white' 
+                : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
             }`}
             onClick={() => setActiveView('interior')}
-            aria-selected={activeView === 'interior'}
-            role="tab"
           >
-            Interior View
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span className="hidden xxs:inline">Interior</span>
+            <span className="xxs:hidden">Int</span>
           </button>
         </div>
       )}
       
-      {/* Exterior 360° View */}
-      {hasExterior && activeView === 'exterior' && (
-        <div className={isFullPage ? "mb-8" : ""} role="tabpanel" aria-label="Exterior View">
-          {isFullPage && (
-            <h2 className="text-2xl font-semibold mb-6">Exterior 360° View</h2>
-          )}
-          <div className={`${isFullPage ? "bg-white rounded-xl overflow-hidden border border-gray-200 p-6" : ""}`}>
-            {isFullPage && (
-              <p className="text-gray-600 mb-4">
-                Explore the {title} from every angle. Click and drag to rotate the vehicle and see all exterior details.
-              </p>
-            )}
-            <div className="aspect-[16/9] rounded-lg overflow-hidden">
-              <iframe
-                src={threeSixtyView.exterior}
-                className="w-full h-full"
-                title={`${title} Exterior 360° View`}
-                allowFullScreen
-              />
+      {/* Iframe container with consistent aspect ratio */}
+      <div className={`rounded-lg ${!hasInterior || !hasExterior ? 'rounded-t-lg' : ''} overflow-hidden border border-gray-200 bg-gray-50 ${aspectRatioClasses[size] || aspectRatioClasses.large}`}>
+        {currentViewSrc ? (
+          <iframe 
+            src={currentViewSrc} 
+            title={viewerTitle}
+            className="w-full h-full bg-white"
+            allowFullScreen
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-center p-4">
+              <svg className="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              </svg>
+              <p className="mt-2 text-sm text-gray-500">No {activeView} view available</p>
             </div>
-            {isFullPage && (
-              <div className="mt-4 text-sm text-gray-500">
-                <p>Tip: Click and drag to rotate. Use mouse wheel or pinch to zoom.</p>
-              </div>
-            )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
       
-      {/* Interior 360° View */}
-      {hasInterior && activeView === 'interior' && (
-        <div className={isFullPage ? "mb-8" : ""} role="tabpanel" aria-label="Interior View">
-          {isFullPage && (
-            <h2 className="text-2xl font-semibold mb-6">Interior 360° View</h2>
-          )}
-          <div className={`${isFullPage ? "bg-white rounded-xl overflow-hidden border border-gray-200 p-6" : ""}`}>
-            {isFullPage && (
-              <p className="text-gray-600 mb-4">
-                Step inside the {title} and explore the cabin in detail. Look around to see all interior features.
-              </p>
-            )}
-            <div className="aspect-[16/9] rounded-lg overflow-hidden">
-              <iframe
-                src={threeSixtyView.interior}
-                className="w-full h-full"
-                title={`${title} Interior 360° View`}
-                allowFullScreen
-              />
-            </div>
-            {isFullPage && (
-              <div className="mt-4 text-sm text-gray-500">
-                <p>Tip: Click and drag to look around. Use mouse wheel or pinch to zoom.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      
-      {/* View Full Experience Link - Only show on main page */}
-      {!isFullPage && (
-        <div className="mt-4 text-center">
-          <Link 
-            href={`/cars/${brand}/${model}/360-view`}
-            className="text-red-600 hover:underline inline-flex items-center gap-1"
-          >
-            <span>View Full Experience</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-      )}
+      {/* Mobile-friendly help text */}
+      <div className="mt-1.5 flex items-center justify-center">
+        <p className="text-[10px] sm:text-xs text-gray-500 text-center">
+          {deviceType === 'mobile' 
+            ? "Touch and drag to interact • Pinch to zoom" 
+            : "Click and drag to interact • Use mouse wheel to zoom"
+          }
+        </p>
+      </div>
     </div>
   );
-} 
+}

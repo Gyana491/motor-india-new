@@ -69,6 +69,29 @@ export default async function ThreeSixtyViewPage({ params }) {
           Immerse yourself in a complete virtual tour of the {brand} {model}. Explore every angle of the exterior design
           and step inside to experience the interior cabin space.
         </p>
+        
+        {hasBothViews && (
+          <div className="mt-5 sm:mt-6 bg-gray-800/50 p-1.5 rounded-lg inline-flex">
+            <Link 
+              href={`/cars/${brand}/${model}/360-view/exterior`}
+              className="py-2 px-4 rounded-md flex items-center gap-2 transition-colors font-medium text-sm sm:text-base hover:bg-red-500/20"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Exterior
+            </Link>
+            <Link 
+              href={`/cars/${brand}/${model}/360-view/interior`}
+              className="py-2 px-4 rounded-md flex items-center gap-2 transition-colors font-medium text-sm sm:text-base hover:bg-blue-500/20"
+            >
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              Interior
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
@@ -83,7 +106,7 @@ export default async function ThreeSixtyViewPage({ params }) {
                 </div>
                 <div className="ml-2 sm:ml-3">
                   <p className="text-xs sm:text-sm text-blue-700">
-                    <span className="font-medium">Both views available!</span> Use the tabs below to switch between exterior and interior views.
+                    <span className="font-medium">Both views available!</span> This car has both interior and exterior 360° views. Use the tabs above to view them separately.
                   </p>
                 </div>
               </div>
@@ -163,6 +186,32 @@ export default async function ThreeSixtyViewPage({ params }) {
             </div>
             
             <div className="p-3 sm:p-4">
+              {hasBothViews && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <h3 className="font-medium text-sm text-gray-700 mb-3">View Selector</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    <Link 
+                      href={`/cars/${brand}/${model}/360-view/exterior`}
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-red-50 text-gray-800 hover:text-red-700 rounded-lg transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      </svg>
+                      <span>Exterior 360° View</span>
+                    </Link>
+                    <Link 
+                      href={`/cars/${brand}/${model}/360-view/interior`}
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-50 text-gray-800 hover:text-blue-700 rounded-lg transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                      <span>Interior 360° View</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+              
               <div className="flex flex-nowrap overflow-x-auto lg:overflow-x-visible lg:flex-col pb-2 lg:pb-0 gap-2 lg:gap-1 lg:space-y-1 -mx-1 px-1">
                 {quickNavLinks.map((link, index) => (
                   <Link 

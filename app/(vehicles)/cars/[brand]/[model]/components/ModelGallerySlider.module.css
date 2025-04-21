@@ -1,0 +1,91 @@
+/* Premium Slider Styles */
+
+/* Create a wrapper class for global styles */
+.sliderWrapper :global(.swiper-button-next),
+.sliderWrapper :global(.swiper-button-prev) {
+  display: none;
+}
+
+/* Customize pagination bullets */
+.sliderWrapper :global(.swiper-pagination-bullet) {
+  width: 10px;
+  height: 10px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.sliderWrapper :global(.swiper-pagination-bullet-active) {
+  background: #ffffff;
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Smooth hover effects for controls */
+.sliderNavButton {
+  transform: translateY(-50%);
+  opacity: 0.7;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.sliderNavButton:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Elegant hover zoom effect on images */
+.imageWrapper {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.sliderImage {
+  transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.sliderImage:hover {
+  transform: scale(1.05);
+}
+
+/* Lightbox animations */
+.lightbox {
+  animation: fadeIn 0.3s ease;
+}
+
+.lightboxContent {
+  animation: scaleIn 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+/* Improve accessibility by making focus states visible but elegant */
+.sliderWrapper :global(.swiper-slide):focus-visible {
+  outline: 2px solid #e11d48;
+  outline-offset: 2px;
+}
+
+/* Slide transition effect override */
+.sliderWrapper :global(.swiper-slide) {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Preloading optimization styles */
+.preloadContainer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}

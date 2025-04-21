@@ -5,7 +5,6 @@ import VariantsSection from './components/VariantsSection';
 import ColorGallery from './components/ColorGallery';
 import KeyHighlights from './components/KeyHighlights';
 import OffRoadCapabilities from './components/OffRoadCapabilities';
-import ThreeSixtyViewer from './components/ThreeSixtyViewer';
 
 
 async function getModelDetails(brand, model) {

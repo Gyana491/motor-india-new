@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 
 // Fullscreen Modal Component with touch-friendly controls
-const FullscreenModal = ({ isOpen, onClose, children, title }) => {
+const FullscreenModal = ({ isOpen, onClose, children, title, activeView, onSwitchView, hasExterior, hasInterior }) => {
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -32,11 +32,54 @@ const FullscreenModal = ({ isOpen, onClose, children, title }) => {
             </svg>
           </button>
         </div>
-        <div className="flex-grow overflow-hidden rounded-lg bg-gray-900">
+        
+        {/* View toggle buttons - Only show when both views are available */}
+        {hasExterior && hasInterior && (
+          <div className="mb-2 sm:mb-3 flex justify-center">
+            <div className="inline-flex rounded-md shadow-sm bg-gray-800 p-1">
+              <button
+                onClick={() => onSwitchView('exterior')}
+                className={`px-4 py-2 text-sm font-medium rounded-md flex items-center gap-2 transition-colors ${
+                  activeView === 'exterior'
+                    ? 'bg-red-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                data-view="exterior"
+                aria-selected={activeView === 'exterior'}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Exterior</span>
+              </button>
+              <button
+                onClick={() => onSwitchView('interior')}
+                className={`px-4 py-2 text-sm font-medium rounded-md flex items-center gap-2 transition-colors ${
+                  activeView === 'interior'
+                    ? 'bg-red-600 text-white'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                data-view="interior"
+                aria-selected={activeView === 'interior'}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span>Interior</span>
+              </button>
+            </div>
+          </div>
+        )}
+        
+        <div className="flex-grow overflow-hidden rounded-lg bg-gray-900 relative">
           {children}
         </div>
+        
         {/* Mobile-friendly bottom navigation bar */}
-        <div className="mt-2 sm:mt-4 flex justify-center sm:justify-end">
+        <div className="mt-2 sm:mt-4 flex justify-between items-center">
+          <div className="text-white text-sm">
+            <span className="px-3 py-1 bg-red-600 rounded-full">{activeView === 'exterior' ? 'Exterior View' : 'Interior View'}</span>
+          </div>
           <button
             onClick={onClose}
             className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-colors text-sm sm:text-base"
@@ -57,19 +100,43 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
   const [activeView, setActiveView] = useState('exterior');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [fullscreenIframeLoaded, setFullscreenIframeLoaded] = useState(false);
   const [deviceType, setDeviceType] = useState('desktop');
+  const [viewCache, setViewCache] = useState({
+    exterior: { loaded: false, src: threeSixtyView?.exterior || null },
+    interior: { loaded: false, src: threeSixtyView?.interior || null }
+  });
+  
   const iframeRef = useRef(null);
+  const fullscreenIframeRef = useRef(null);
+  const previousViewRef = useRef(activeView);
   
   const hasExterior = !!threeSixtyView?.exterior;
   const hasInterior = !!threeSixtyView?.interior;
   
+  // Current view source based on active view
+  const currentViewSrc = activeView === 'exterior' ? threeSixtyView?.exterior : threeSixtyView?.interior;
+  
+  // View title generation
+  const viewerTitle = activeView === 'exterior' 
+    ? `${title} Exterior 360° View` 
+    : `${title} Interior 360° View`;
+
   // Set initial active view based on available content
   useEffect(() => {
     if (!hasExterior && hasInterior) {
       setActiveView('interior');
+      previousViewRef.current = 'interior';
     } else if (hasExterior) {
       setActiveView('exterior');
+      previousViewRef.current = 'exterior';
     }
+    
+    // Cache the initial view sources
+    setViewCache({
+      exterior: { loaded: false, src: threeSixtyView?.exterior || null },
+      interior: { loaded: false, src: threeSixtyView?.interior || null }
+    });
     
     // Detect device type for optimized controls
     const detectDeviceType = () => {
@@ -84,13 +151,15 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
     };
     
     detectDeviceType();
-    
-    // Handle orientation changes
+  }, [hasExterior, hasInterior, threeSixtyView]);
+  
+  // Handle orientation changes
+  useEffect(() => {
     const handleOrientation = () => {
       if (isFullscreen) {
         // Reframe the iframe content on orientation change
-        if (iframeRef.current) {
-          const iframe = iframeRef.current;
+        if (fullscreenIframeRef.current) {
+          const iframe = fullscreenIframeRef.current;
           const src = iframe.src;
           iframe.src = '';
           setTimeout(() => {
@@ -104,13 +173,41 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
     return () => {
       window.removeEventListener('orientationchange', handleOrientation);
     };
-  }, [hasExterior, hasInterior, isFullscreen]);
+  }, [isFullscreen]);
   
-  const currentViewSrc = activeView === 'exterior' ? threeSixtyView?.exterior : threeSixtyView?.interior;
-  const viewerTitle = activeView === 'exterior' 
-    ? `${title} Exterior 360° View` 
-    : `${title} Interior 360° View`;
-    
+  // Reset iframe loaded state when active view changes
+  useEffect(() => {
+    // Only reset loading state if the view actually changed
+    if (previousViewRef.current !== activeView) {
+      setIframeLoaded(false);
+      if (isFullscreen) {
+        setFullscreenIframeLoaded(false);
+      }
+      previousViewRef.current = activeView;
+    }
+  }, [activeView, isFullscreen]);
+  
+  // Handle view switching with proper state management
+  const handleSwitchView = useCallback((view) => {
+    if (view !== activeView) {
+      // Update loading states for the new view
+      setIframeLoaded(viewCache[view]?.loaded || false);
+      setActiveView(view);
+      
+      if (isFullscreen) {
+        setFullscreenIframeLoaded(false);
+        
+        // Ensure the fullscreen iframe is properly updated
+        setTimeout(() => {
+          if (fullscreenIframeRef.current) {
+            const viewSrc = view === 'exterior' ? threeSixtyView?.exterior : threeSixtyView?.interior;
+            fullscreenIframeRef.current.src = viewSrc;
+          }
+        }, 50);
+      }
+    }
+  }, [activeView, isFullscreen, threeSixtyView, viewCache]);
+  
   // Define quick navigation links for "Explore More" section
   const exploreLinks = [
     { name: "Specifications", path: `/cars/${brand}/${model}/specifications`, icon: "M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
@@ -120,8 +217,36 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
   // Handle iframe load events
   const handleIframeLoad = () => {
     setIframeLoaded(true);
+    setViewCache(prev => ({
+      ...prev,
+      [activeView]: { ...prev[activeView], loaded: true }
+    }));
   };
   
+  const handleFullscreenIframeLoad = () => {
+    setFullscreenIframeLoaded(true);
+  };
+  
+  // Handle entering fullscreen mode with proper state preservation
+  const enterFullscreen = useCallback(() => {
+    setIsFullscreen(true);
+    setFullscreenIframeLoaded(false);
+    
+    // Force a delay to ensure the modal is mounted before setting the iframe src
+    setTimeout(() => {
+      if (fullscreenIframeRef.current) {
+        // Make sure we're loading the current active view (interior or exterior)
+        const viewSrc = activeView === 'exterior' ? threeSixtyView?.exterior : threeSixtyView?.interior;
+        fullscreenIframeRef.current.src = viewSrc;
+      }
+    }, 100);
+  }, [activeView, threeSixtyView]);
+
+  // Handle closing fullscreen mode
+  const closeFullscreen = useCallback(() => {
+    setIsFullscreen(false);
+  }, []);
+
   return (
     <div className="w-full">
       {/* Navigation Tabs - Show whenever either exterior or interior is available */}
@@ -146,9 +271,10 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
                     ? 'bg-red-600 text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
-                onClick={() => setActiveView('exterior')}
+                onClick={() => handleSwitchView('exterior')}
                 aria-selected={activeView === 'exterior'}
                 role="tab"
+                data-view="exterior"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -167,9 +293,10 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
                     ? 'bg-red-600 text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-50'
                 }`}
-                onClick={() => setActiveView('interior')}
+                onClick={() => handleSwitchView('interior')}
                 aria-selected={activeView === 'interior'}
                 role="tab"
+                data-view="interior"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -206,6 +333,7 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
                     className="w-full h-full"
                     title={viewerTitle}
                     allowFullScreen
+                    key={`main-${activeView}`}
                     onLoad={handleIframeLoad}
                   />
                 </>
@@ -219,9 +347,10 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
             {/* Fullscreen button - larger touch target on mobile */}
             {currentViewSrc && (
               <button 
-                onClick={() => setIsFullscreen(true)}
+                onClick={enterFullscreen}
                 className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-black bg-opacity-70 text-white p-2 sm:p-3 rounded-full hover:bg-opacity-90 transition-opacity shadow-lg"
-                aria-label="Open fullscreen"
+                aria-label={`Open ${activeView} view in fullscreen`}
+                data-view={activeView}
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
@@ -252,8 +381,9 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
               </div>
             </div>
             <button 
-              onClick={() => setIsFullscreen(true)}
+              onClick={enterFullscreen}
               className="text-white bg-red-600 hover:bg-red-700 py-1.5 sm:py-2 px-3 sm:px-4 rounded flex items-center gap-1.5 sm:gap-2 transition-colors shadow-sm self-start sm:self-center text-xs sm:text-sm font-medium"
+              data-view={activeView}
             >
               <span>Fullscreen</span>
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -303,16 +433,31 @@ export default function ThreeSixtyViewerEnhanced({ threeSixtyView, title, brand,
       {/* Fullscreen Modal with mobile optimizations */}
       <FullscreenModal
         isOpen={isFullscreen}
-        onClose={() => setIsFullscreen(false)}
+        onClose={closeFullscreen}
         title={viewerTitle}
+        activeView={activeView}
+        onSwitchView={handleSwitchView}
+        hasExterior={hasExterior}
+        hasInterior={hasInterior}
       >
         {currentViewSrc ? (
-          <iframe
-            src={currentViewSrc}
-            className="w-full h-full"
-            title={`${viewerTitle} (Fullscreen)`}
-            allowFullScreen
-          />
+          <>
+            {!fullscreenIframeLoaded && (
+              <div className="absolute inset-0 bg-gray-800 flex flex-col items-center justify-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 border-3 border-gray-300 border-t-red-600 rounded-full animate-spin"></div>
+                <p className="mt-2 text-sm sm:text-base text-white">Loading {activeView} view...</p>
+              </div>
+            )}
+            <iframe
+              ref={fullscreenIframeRef}
+              src={currentViewSrc}
+              className="w-full h-full"
+              title={`${viewerTitle} (Fullscreen)`}
+              allowFullScreen
+              key={`fullscreen-${activeView}`}
+              onLoad={handleFullscreenIframeLoad}
+            />
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-800">
             <p className="text-white text-sm sm:text-base">No {activeView} view available</p>

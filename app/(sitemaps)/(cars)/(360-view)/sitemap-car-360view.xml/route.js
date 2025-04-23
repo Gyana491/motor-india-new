@@ -18,7 +18,7 @@ export async function GET() {
     
     return `
   <url>
-    <loc>${page.link}360-view/exterior</loc>
+    <loc>${page.link}360-view</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

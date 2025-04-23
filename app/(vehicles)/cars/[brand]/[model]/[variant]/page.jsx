@@ -20,44 +20,44 @@ export default async function VariantDetailPage({ params }) {
     const variantData = await getVariantDetails(brand, model, variant);
     const { title, price, formatted_price, body_type, image_url, image_alt, attributes } = variantData;
 
-    // Helper function to get attribute value by name
-    const getAttributeValue = (attributeName) => {
-      const attr = attributes.find(a => a.attribute_name === attributeName);
+    // Helper function to get attribute value by slug
+    const getAttributeValue = (attributeSlug) => {
+      const attr = attributes.find(a => a.attribute_slug === attributeSlug);
       return attr ? attr.attribute_values[0] : null;
     };
 
     // Get fuel type to determine which specs to show
-    const fuelType = getAttributeValue('Fuel Type');
+    const fuelType = getAttributeValue('pa_fuel-type');
     const isElectric = fuelType?.toLowerCase() === 'electric';
 
     // Dynamic specs based on fuel type
     const getKeySpecs = () => {
       if (isElectric) {
         return [
-          { label: 'Range', value: getAttributeValue('Range'), icon: '⚡' },
-          { label: 'Battery Capacity', value: getAttributeValue('Battery Capacity'), icon: '🔋' },
-          { label: 'Charging Time', value: getAttributeValue('Charging Time'), icon: '⚡' },
-          { label: 'Motor Power', value: getAttributeValue('Motor Power'), icon: '💪' },
+          { label: 'Range', value: getAttributeValue('pa_range'), icon: '⚡' },
+          { label: 'Battery Capacity', value: getAttributeValue('pa_battery-capacity'), icon: '🔋' },
+          { label: 'Charging Time', value: getAttributeValue('pa_charging-time'), icon: '⚡' },
+          { label: 'Motor Power', value: getAttributeValue('pa_motor-power'), icon: '💪' },
         ];
       }
       return [
-        { label: 'Mileage (City)', value: getAttributeValue('Mileage (City)'), icon: '🛣️' },
-        { label: 'Engine', value: getAttributeValue('Engine Type'), icon: '⚙️' },
-        { label: 'Transmission', value: getAttributeValue('Transmission'), icon: '🔄' },
-        { label: 'Fuel Capacity', value: getAttributeValue('Fuel Capacity'), icon: '⛽' },
+        { label: 'Mileage (City)', value: getAttributeValue('pa_mileage-city'), icon: '🛣️' },
+        { label: 'Engine', value: getAttributeValue('pa_engine-type'), icon: '⚙️' },
+        { label: 'Transmission', value: getAttributeValue('pa_transmission'), icon: '🔄' },
+        { label: 'Fuel Capacity', value: getAttributeValue('pa_fuel-capacity'), icon: '⛽' },
       ];
     };
 
     // Key features that are important for the vehicle
     const keyFeatures = [
-      { label: 'Safety Rating', value: getAttributeValue('Global NCAP Safety Rating'), icon: '🛡️' },
-      { label: 'Boot Space', value: getAttributeValue('Boot Space'), icon: '🛄' },
-      { label: 'Ground Clearance', value: getAttributeValue('Ground Clearance (Unladen)'), icon: '📏' },
-      { label: 'Seating Capacity', value: getAttributeValue('Seating Capacity'), icon: '👥' },
+      { label: 'Safety Rating', value: getAttributeValue('pa_global-ncap-safety-rating'), icon: '🛡️' },
+      { label: 'Boot Space', value: getAttributeValue('pa_boot-space'), icon: '🛄' },
+      { label: 'Ground Clearance', value: getAttributeValue('pa_ground-clearance-unladen'), icon: '📏' },
+      { label: 'Seating Capacity', value: getAttributeValue('pa_seating-capacity'), icon: '👥' },
     ];
 
     // Declare globalNCAP for safety rating badge
-    const globalNCAP = getAttributeValue('Global NCAP Safety Rating');
+    const globalNCAP = getAttributeValue('pa_global-ncap-safety-rating');
 
     // Determine if the current variant qualifies for a badge ("Top Variant" or "ASE Variant")
     const variantBadge = (() => {
@@ -246,7 +246,7 @@ export async function generateMetadata({ params }) {
   const variantData = await response.json();
   const { title, body_type, formatted_price, image_url, image_alt, attributes } = variantData;
 
-  // Extract key specs for rich description
+  // Extract key specs for rich description - Updated to use attribute_slug
   const engineType = attributes?.find(a => a.attribute_slug === 'pa_engine-type')?.attribute_values[0];
   const maxPower = attributes?.find(a => a.attribute_slug === 'pa_max-power')?.attribute_values[0];
   const colors = attributes?.find(a => a.attribute_slug === 'pa_colors')?.attribute_values;

@@ -1,4 +1,4 @@
-import { BACKEND } from '@/utils/constants';
+import { BACKEND } from '@/app/utils/constants';
 
 export async function getAllCarModelPages() {
   let allPages = [];

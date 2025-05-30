@@ -1,4 +1,4 @@
-import { BACKEND } from '@/utils/constants';
+import { BACKEND } from '@/app/utils/constants';
 
 // Add this line to prevent static generation at build time
 export const dynamic = 'force-dynamic';

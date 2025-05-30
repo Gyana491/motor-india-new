@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import RTOPrice from './RTOPrice';
+import DetailedSpecsV2 from './components/DetailedSpecsV2';
 
 export default async function VariantDetailPage({ params }) {
   // Await params before destructuring
@@ -21,10 +23,10 @@ export default async function VariantDetailPage({ params }) {
     const { title, price, formatted_price, body_type, image_url, image_alt, attributes } = variantData;
 
     // Helper function to get attribute value by slug
-    const getAttributeValue = (attributeSlug) => {
+    function getAttributeValue(attributeSlug) {
       const attr = attributes.find(a => a.attribute_slug === attributeSlug);
       return attr ? attr.attribute_values[0] : null;
-    };
+    }
 
     // Get fuel type to determine which specs to show
     const fuelType = getAttributeValue('pa_fuel-type');
@@ -152,8 +154,8 @@ export default async function VariantDetailPage({ params }) {
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
-                </button>
-              </div>
+                </button>              </div>
+              <RTOPrice params={params} price={{ ...price, slug: `${brand}-${model}-${variant}`.toLowerCase().replace(/\s+/g, '-') }} />
             </div>
           </div>
         </div>
@@ -194,29 +196,8 @@ export default async function VariantDetailPage({ params }) {
           </div>
         </section>
 
-        {/* Detailed Specifications */}
-        <section className="mb-12">
-          <h2 className="text-xl md:text-3xl font-semibold text-gray-800 mb-6">Detailed Specifications</h2>
-          {Object.entries(groupedAttributes).map(([groupName, groupAttributes]) => (
-            <div key={groupName} className="mb-10">
-              <h3 className="text-lg md:text-2xl font-semibold text-gray-700 mb-4">{groupName}</h3>
-              <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 md:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
-                  {groupAttributes.map((attr) => (
-                    <div key={attr.attribute_id} className="border-b border-gray-200 pb-3">
-                      <dt className="text-gray-600 text-sm">{attr.attribute_name}</dt>
-                      <dd className="mt-1 font-medium text-gray-800">
-                        {Array.isArray(attr.attribute_values) 
-                          ? attr.attribute_values.join(', ')
-                          : attr.attribute_values}
-                      </dd>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
+        
+        <DetailedSpecsV2 groupedAttributes={groupedAttributes} />
       </main>
     );
   } catch (error) {

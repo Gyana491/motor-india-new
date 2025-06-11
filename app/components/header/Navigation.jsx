@@ -2,6 +2,7 @@ const Navigation = ({ isMobile }) => {
   const menuItems = [
     { label: 'Cars', href: '/cars' },
     {label:'Posts', href: '/articles'},
+    {label: "Hindi News", href: '/hindi'},
   ];
 
   return (

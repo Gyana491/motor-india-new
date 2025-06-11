@@ -1,16 +1,11 @@
-import SinglePost from "./articles/page";
+import HomePage from "./components/HomePage";
 
 export default function Home() {
-
-
   return (
     <div>
-     
       <main>
-      <SinglePost />
-
+        <HomePage />
       </main>
-     
     </div>
   );
 }

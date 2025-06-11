@@ -61,51 +61,43 @@ const FeaturedPostCard = ({ post, language }) => (
         href={`/${language}/${post.slug}`}
         className="group block h-full"
     >
-        <article className="relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 h-full transform hover:-translate-y-2 border border-slate-100">
+        <article className="relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col lg:flex-row border border-slate-200">
             {/* Image Section */}
-            <div className="relative h-64 lg:h-80 xl:h-96"> 
+            <div className="relative lg:w-3/5 h-64 lg:h-full"> {/* Added fixed height for small screens, full height for large */}
                 {post.image_url && (
-                    <div className="relative w-full h-full">
+                    <div className="relative w-full h-full"> {/* Ensure this div takes full space of its parent */}
                         <Image
                             src={post.image_url}
                             alt={post.image_alt || post.title}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                            priority
+                            sizes="(max-width: 1023px) 100vw, 60vw" // Added sizes attribute for optimization
+                            className="object-cover transform group-hover:scale-105 transition-transform duration-300 ease-out"
+                            priority // Keep priority for LCP element
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         {post.category && (
-                            <span className="absolute top-6 left-6 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 text-sm font-bold rounded-full shadow-lg backdrop-blur-sm">
+                            <span className="absolute top-4 left-4 bg-red-100 text-red-700 px-2.5 py-1 text-xs font-semibold rounded-full shadow-sm">
                                 {post.category}
                             </span>
                         )}
                     </div>
                 )}
             </div>
-            
             {/* Content Section */}
-            <div className="p-8">
-                <h2 className="text-2xl xl:text-3xl font-bold mb-4 group-hover:text-red-600 transition-colors duration-300 line-clamp-3 leading-tight">
+            <div className="lg:w-2/5 p-6 flex flex-col justify-center">
+                <h2 className="text-2xl xl:text-3xl font-bold mb-3 group-hover:text-red-700 transition-colors duration-300 line-clamp-3">
                     {post.title}
                 </h2>
                 {post.excerpt && (
-                    <p className="text-slate-600 line-clamp-3 text-lg leading-relaxed mb-6">
+                    <p className="text-slate-600 line-clamp-3 text-base leading-relaxed mb-4">
                         {post.excerpt}
                     </p>
                 )}
-                <div className="flex items-center justify-between">
+                <div className="text-sm text-slate-500 mt-auto"> {/* Pushes date to bottom */}
                     {post.date && (
-                        <time dateTime={new Date(post.date).toISOString()} className="text-sm text-slate-500 font-medium">
+                        <time dateTime={new Date(post.date).toISOString()}> {/* Added dateTime attribute */}
                             {new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         </time>
                     )}
-                    <div className="flex items-center text-red-600 font-semibold group-hover:text-red-700 transition-colors duration-300">
-                        <span className="text-sm">Read More</span>
-                        <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                        </svg>
-                    </div>
                 </div>
             </div>
         </article>
@@ -117,46 +109,36 @@ const PostCard = ({ post, language }) => (
         href={`/${language}/${post.slug}`}
         className="group block h-full"
     >
-        <article className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 h-full transform hover:-translate-y-1 border border-slate-100">
+        <article className="relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex border border-slate-200">
             {/* Image Section */}
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative w-2/5 flex-shrink-0"> {/* Added flex-shrink-0 */}
                 {post.image_url && (
-                    <div className="relative w-full h-full">
+                    <div className="relative h-full aspect-[4/3]"> {/* Added aspect ratio for consistent image size */}
                         <Image
                             src={post.image_url}
                             alt={post.image_alt || post.title}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                            sizes="40vw" // Added sizes attribute for optimization
+                            className="object-cover transform group-hover:scale-105 transition-transform duration-300 ease-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         {post.category && (
-                             <span className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 text-xs font-bold rounded-full shadow-md">
+                             <span className="absolute top-2 left-2 bg-red-100 text-red-700 px-2 py-0.5 text-xs font-semibold rounded-full shadow-sm">
                                 {post.category}
                             </span>
                         )}
                     </div>
                 )}
             </div>
-            
             {/* Content Section */}
-            <div className="p-6">
-                <h3 className="text-lg xl:text-xl font-bold mb-3 group-hover:text-red-600 transition-colors duration-300 line-clamp-2 leading-tight">
+            <div className="flex-1 p-4 flex flex-col justify-center">
+                <h2 className="text-lg font-semibold mb-1.5 group-hover:text-red-700 transition-colors duration-300 line-clamp-2">
                     {post.title}
-                </h3>
-                <div className="flex items-center justify-between mt-4">
-                    {post.date && (
-                        <time dateTime={new Date(post.date).toISOString()} className="text-xs text-slate-500 font-medium">
-                            {new Date(post.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </time>
-                    )}
-                    <div className="flex items-center text-red-600 font-semibold group-hover:text-red-700 transition-colors duration-300">
-                        <span className="text-xs">Read</span>
-                        <svg className="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
+                </h2>
+                {post.date && (
+                    <time dateTime={new Date(post.date).toISOString()} className="text-xs text-slate-500 mt-auto"> {/* Pushes date to bottom, added dateTime */}
+                        {new Date(post.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </time>
+                )}
             </div>
         </article>
     </Link>
@@ -174,89 +156,67 @@ const HomePage = async () => {
     });
 
     // Handle cases where posts might be empty to avoid errors
-    const hasEnglishPosts = englishPosts && englishPosts.length > 0;
-    const firstEnglishPost = hasEnglishPosts ? englishPosts[0] : null;
-    const otherEnglishPosts = hasEnglishPosts && englishPosts.length > 1 ? englishPosts.slice(1, Math.min(3, englishPosts.length)) : [];
+    const firstEnglishPost = englishPosts && englishPosts.length > 0 ? englishPosts[0] : null;
+    const otherEnglishPosts = englishPosts && englishPosts.length > 1 ? englishPosts.slice(1, 3) : [];
     
-    const hasHindiPosts = hindiPosts && hindiPosts.length > 0;
-    const firstHindiPost = hasHindiPosts ? hindiPosts[0] : null;
-    const otherHindiPosts = hasHindiPosts && hindiPosts.length > 1 ? hindiPosts.slice(1, Math.min(3, hindiPosts.length)) : [];
+    const firstHindiPost = hindiPosts && hindiPosts.length > 0 ? hindiPosts[0] : null;
+    const otherHindiPosts = hindiPosts && hindiPosts.length > 1 ? hindiPosts.slice(1, 3) : [];
 
     return (
-        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 min-h-screen">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-20 max-w-7xl">
+        <div className="bg-slate-50 min-h-screen"> {/* Ensures background covers screen */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 max-w-7xl">
             
             {/* English Section */}
-            {hasEnglishPosts && (
-            <section aria-labelledby="latest-articles-title" className="relative">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 gap-4">
-                    <div>
-                        <h2 id="latest-articles-title" className="text-4xl lg:text-5xl font-bold text-slate-900 mb-2">
-                            Latest Articles
-                        </h2>
-                        <p className="text-slate-600 text-lg">Discover the latest automotive insights and news</p>
-                    </div>
+            {firstEnglishPost && ( // Only render section if there's a post
+            <section aria-labelledby="latest-articles-title"> {/* Added aria-labelledby */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 id="latest-articles-title" className="text-3xl font-bold text-slate-800">Latest Articles</h2>
                     <Link 
                         href="/articles"
-                        className="group inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+                        className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"
                     >
-                        View All Articles
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                         </svg>
                     </Link>
                 </div>
-                
-                {/* Modern Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr">
-                    {/* Hero Post - spans 2 columns and 2 rows on large screens */}
-                    <div className="md:col-span-2 lg:row-span-2">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div className="lg:col-span-7 xl:col-span-8"> {/* Adjusted span for potentially better balance */}
                         <FeaturedPostCard post={firstEnglishPost} language="articles" />
                     </div>
-                    
-                    {/* Side Posts */}
-                    {otherEnglishPosts.map((post, index) => (
-                        <div key={post.id} className={`${index === 0 ? 'md:col-span-1 lg:col-span-2' : ''}`}>
-                            <PostCard post={post} language="articles" />
-                        </div>
+                    <div className="lg:col-span-5 xl:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+                    {otherEnglishPosts.map(post => (
+                        <PostCard key={post.id} post={post} language="articles" />
                     ))}
+                    </div>
                 </div>
             </section>
             )}
 
             {/* Hindi Section */}
-            {hasHindiPosts && (
-            <section aria-labelledby="hindi-लेख-title" className="relative">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 gap-4">
-                    <div>
-                        <h2 id="hindi-लेख-title" className="text-4xl lg:text-5xl font-bold text-slate-900 mb-2">
-                            हिंदी लेख
-                        </h2>
-                        <p className="text-slate-600 text-lg">नवीनतम ऑटोमोटिव समाचार और जानकारी</p>
-                    </div>
+            {firstHindiPost && ( // Only render section if there's a post
+            <section aria-labelledby="hindi-लेख-title"> {/* Added aria-labelledby */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 id="hindi-लेख-title" className="text-3xl font-bold text-slate-800">हिंदी लेख</h2>
                     <Link 
                         href="/hindi"
-                        className="group inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+                        className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"
                     >
                         सभी देखें
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                         </svg>
                     </Link>
                 </div>
-                
-                {/* Modern Masonry-Style Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    {/* Hero Post */}
-                    <div className="md:col-span-2 lg:col-span-3">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div className="lg:col-span-7 xl:col-span-8"> {/* Adjusted span */}
                         <FeaturedPostCard post={firstHindiPost} language="hindi" />
                     </div>
-                    
-                    {/* Side Posts in a stacked layout */}
-                    <div className="md:col-span-1 lg:col-span-2 space-y-6">
-                        {otherHindiPosts.map(post => (
-                            <PostCard key={post.id} post={post} language="hindi" />
-                        ))}
+                    <div className="lg:col-span-5 xl:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+                    {otherHindiPosts.map(post => (
+                        <PostCard key={post.id} post={post} language="hindi" />
+                    ))}
                     </div>
                 </div>
             </section>

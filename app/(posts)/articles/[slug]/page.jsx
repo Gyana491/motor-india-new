@@ -1,7 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Metadata } from 'next'
-import "./post-styles.css" // Import CSS file for styling
+import "../../post-styles.css" // Import shared post styles
 
 // Function to clean HTML entities
 const cleanHtmlEntities = (text) => {
@@ -281,7 +280,7 @@ export default async function SinglePost({ params }) {
                     {post.tags.map((tag, idx) => (
                       <Link 
                         key={tag.id} 
-                        href={`/tag/${tag.slug}`}
+                        href={`/articles/tag/${tag.slug}`}
                         className={`inline-flex items-center px-4 py-2 ${
                           idx % 4 === 0 ? 'bg-red-50 hover:bg-red-100 border-red-100' : 
                           idx % 4 === 1 ? 'bg-blue-50 hover:bg-blue-100 border-blue-100' : 

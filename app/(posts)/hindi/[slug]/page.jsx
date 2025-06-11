@@ -1,7 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Metadata } from 'next'
-import "./post-styles.css"
+import "../../post-styles.css" // Import shared post styles
 
 // Generate metadata for the page
 export async function generateMetadata({ params }) {

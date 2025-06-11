@@ -3,7 +3,9 @@ import Image from "next/image"
 
 const getEnglishPosts = async () => {
     // Simulating API call - ensure your BACKEND env variable is set
-    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?_embed=true&per_page=6`)
+    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?_embed=true&per_page=6`,{
+        next: { revalidate: 0 }
+    })
     const data = await response.json()
     
     return data.map(post => ({
@@ -20,7 +22,9 @@ const getEnglishPosts = async () => {
 
 const getHindiPosts = async () => {
     // Simulating API call - ensure your BACKEND env variable is set
-    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/hindi?_embed=true&per_page=6`)
+    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/hindi?_embed=true&per_page=6`,{
+        next: { revalidate: 0 }
+    })
     const data = await response.json()
     
     return data.map(post => ({

@@ -3,6 +3,24 @@ import Image from "next/image"
 import { Metadata } from 'next'
 import "./post-styles.css" // Import CSS file for styling
 
+// Function to clean HTML entities
+const cleanHtmlEntities = (text) => {
+  if (!text) return text;
+  return text
+    .replace(/&#8211;/g, '–') // en dash
+    .replace(/&#8212;/g, '—') // em dash
+    .replace(/&#038;/g, '&') // ampersand 
+    .replace(/&#8216;/g, "'") // single quote left
+    .replace(/&#8217;/g, "'") // single quote right
+    .replace(/&#8220;/g, '"') // double quote left
+    .replace(/&#8221;/g, '"') // double quote right
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
 // Generate metadata for the page
 export async function generateMetadata({ params }) {
   const post = await getPost(params.slug)
@@ -67,7 +85,7 @@ export async function generateMetadata({ params }) {
 // Fetch a single post by slug
 const getPost = async (slug) => {
   const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?slug=${slug}&_embed=true`, {
-    next: { revalidate: 300 } // Cache for 5 minutes
+    next: { revalidate: 0 } // no Cache 
   })
   const posts = await response.json()
   
@@ -80,24 +98,24 @@ const getPost = async (slug) => {
   return {
     id: post.id,
     slug: post.slug,
-    title: post.title.rendered,
-    content: post.content.rendered,
+    title: cleanHtmlEntities(post.title.rendered),
+    content: cleanHtmlEntities(post.content.rendered),
     date: post.date,
     modified: post.modified,
     image_url: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-    image_alt: post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || '',
+    image_alt: cleanHtmlEntities(post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || ''),
     categories: post._embedded?.['wp:term']?.[0]?.map(cat => ({
       id: cat.id,
-      name: cat.name,
+      name: cleanHtmlEntities(cat.name),
       slug: cat.slug
     })) || [],
     tags: post._embedded?.['wp:term']?.[1]?.map(tag => ({
       id: tag.id,
-      name: tag.name,
+      name: cleanHtmlEntities(tag.name),
       slug: tag.slug
     })) || [],
     author: {
-      name: post._embedded?.['author']?.[0]?.name || 'Unknown',
+      name: cleanHtmlEntities(post._embedded?.['author']?.[0]?.name || 'Unknown'),
       avatar: post._embedded?.['author']?.[0]?.avatar_urls?.['96'] || null
     }
   }

@@ -7,7 +7,14 @@ async function getModelVariants(brand, model) {
     const slug = `${brand}-${model}`.toLowerCase().replace(/\s+/g, "-");
     const response = await fetch(
       `${process.env.BACKEND}/wp-json/api/car?slug=${slug}`,
-      { cache: "no-store" } // Disable caching to ensure fresh data
+      {
+        next: { 
+          revalidate: 300 // Revalidate every 5 minutes
+        },
+        headers: {
+          'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600'
+        }
+      }
     );
 
     if (!response.ok) {

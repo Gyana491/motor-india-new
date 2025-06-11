@@ -12,7 +12,10 @@ async function getModelDetails(brand, model) {
     const slug = `${brand}-${model}`.toLowerCase().replace(/\s+/g, '-');
     const response = await fetch(`${process.env.BACKEND}/wp-json/api/car?slug=${slug}`, {
       next: { 
-        revalidate: 600 // Revalidate every 10 minutes
+        revalidate: 300 // Revalidate every 5 minutes
+      },
+      headers: {
+        'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600'
       }
     });
     
@@ -20,10 +23,14 @@ async function getModelDetails(brand, model) {
       throw new Error(`Failed to fetch: ${response.status}`);
     }
     
-    return await response.json();
+    const data = await response.json();
+    if (!data || !data.posts || data.posts.length === 0) {
+      return null;
+    }
+    return data;
   } catch (error) {
     console.error("Error fetching car details:", error);
-    return { posts: [] };
+    return null;
   }
 }
 

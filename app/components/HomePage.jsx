@@ -1,6 +1,23 @@
 import Link from "next/link"
 import Image from "next/image"
 
+const cleanHtmlEntities = (text) => {
+    if (!text) return text;
+    return text
+        .replace(/&#8211;/g, '–') // en dash
+        .replace(/&#8212;/g, '—') // em dash
+        .replace(/&#038;/g, '&') // ampersand 
+        .replace(/&#8216;/g, "'") // single quote left
+        .replace(/&#8217;/g, "'") // single quote right
+        .replace(/&#8220;/g, '"') // double quote left
+        .replace(/&#8221;/g, '"') // double quote right
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+}
+
 const getEnglishPosts = async () => {
     // Simulating API call - ensure your BACKEND env variable is set
     const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/posts?_embed=true&per_page=6`,{
@@ -11,12 +28,12 @@ const getEnglishPosts = async () => {
     return data.map(post => ({
         id: post.id,
         slug: post.slug,
-        title: post.title.rendered,
-        excerpt: post.excerpt.rendered.replace(/<[^>]*>/g, ''), // Strip HTML tags
+        title: cleanHtmlEntities(post.title.rendered),
+        excerpt: cleanHtmlEntities(post.excerpt.rendered.replace(/<[^>]*>/g, '')), // Strip HTML tags and clean entities
         date: post.date,
         image_url: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-        image_alt: post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || '',
-        category: post._embedded?.['wp:term']?.[0]?.[0]?.name || null
+        image_alt: cleanHtmlEntities(post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || ''),
+        category: cleanHtmlEntities(post._embedded?.['wp:term']?.[0]?.[0]?.name || null)
     }))
 }
 
@@ -30,12 +47,12 @@ const getHindiPosts = async () => {
     return data.map(post => ({
         id: post.id,
         slug: post.slug,
-        title: post.title.rendered,
-        excerpt: post.excerpt.rendered.replace(/<[^>]*>/g, ''), // Strip HTML tags
+        title: cleanHtmlEntities(post.title.rendered),
+        excerpt: cleanHtmlEntities(post.excerpt.rendered.replace(/<[^>]*>/g, '')), // Strip HTML tags and clean entities
         date: post.date,
         image_url: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-        image_alt: post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || '',
-        category: post._embedded?.['wp:term']?.[0]?.[0]?.name || null
+        image_alt: cleanHtmlEntities(post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || ''),
+        category: cleanHtmlEntities(post._embedded?.['wp:term']?.[0]?.[0]?.name || null)
     }))
 }
 

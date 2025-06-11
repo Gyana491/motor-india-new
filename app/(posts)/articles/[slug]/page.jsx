@@ -1,6 +1,68 @@
 import Link from "next/link"
 import Image from "next/image"
+import { Metadata } from 'next'
 import "./post-styles.css" // Import CSS file for styling
+
+// Generate metadata for the page
+export async function generateMetadata({ params }) {
+  const post = await getPost(params.slug)
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found | Motor India',
+      description: 'The requested article could not be found.'
+    }
+  }
+
+  const metadata = {
+    title: `${post.title} | Motor India`,
+    description: post.content.replace(/<[^>]*>/g, '').slice(0, 160),
+    keywords: [...post.categories.map(cat => cat.name), 'Motor India', 'Automotive News'].join(', '),
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_FRONTEND}/articles/${post.slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.content.replace(/<[^>]*>/g, '').slice(0, 160),
+      url: `${process.env.NEXT_PUBLIC_FRONTEND}/articles/${post.slug}`,
+      type: 'article',
+      publishedTime: post.date,
+      modifiedTime: post.modified,
+      images: [
+        {
+          url: post.image_url || `${process.env.NEXT_PUBLIC_FRONTEND}/assets/place-holder.jpg`,
+          width: 1200,
+          height: 630,
+          alt: post.image_alt || post.title,
+        }
+      ],
+      siteName: 'Motor India',
+      publisher: {
+        '@type': 'Organization',
+        name: 'Motor India',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${process.env.NEXT_PUBLIC_FRONTEND}/assets/motor-india-logo.png`
+        }
+      }
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.content.replace(/<[^>]*>/g, '').slice(0, 160),
+      images: [post.image_url || `${process.env.NEXT_PUBLIC_FRONTEND}/assets/place-holder.jpg`],
+    }
+  }
+
+  return metadata
+}
 
 // Fetch a single post by slug
 const getPost = async (slug) => {
@@ -75,173 +137,170 @@ export default async function SinglePost({ params }) {
       </main>
     )
   }
+
+  // Generate JSON-LD structured data
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    datePublished: post.date,
+    dateModified: post.modified,
+    author: {
+      '@type': 'Person',
+      name: post.author.name,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Motor India',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${process.env.NEXT_PUBLIC_FRONTEND}/assets/motor-india-logo.png`
+      }
+    },
+    image: post.image_url || `${process.env.NEXT_PUBLIC_FRONTEND}/assets/place-holder.jpg`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${process.env.NEXT_PUBLIC_FRONTEND}/articles/${post.slug}`
+    }
+  }
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Main content */}
-        <main className="lg:w-2/3">
-          {/* Back button */}
-          <Link href="/articles" className="text-red-600 hover:underline mb-6 inline-block">
-            ← Back to all posts
-          </Link>
-          
-          {/* Post title */}
-          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-          
-          {/* Post metadata */}
-          <div className="flex flex-wrap items-center text-sm text-gray-500 mb-6">
-            {post.date && (
-              <span>Published: {new Date(post.date).toLocaleDateString()}</span>
-            )}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Main content */}
+          <main className="lg:w-2/3">
+            {/* Back button */}
+            <Link href="/articles" className="text-red-600 hover:underline mb-6 inline-block">
+              ← Back to all posts
+            </Link>
             
-            {post.modified && post.modified !== post.date && (
-              <span className="ml-4">Updated: {new Date(post.modified).toLocaleDateString()}</span>
-            )}
+            {/* Post title */}
+            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             
-            {post.categories.length > 0 && (
-              <div className="ml-4 flex items-center">
-                <span className="mr-1">Categories:</span>
-                {post.categories.map((cat, index) => (
-                  <span key={cat.id}>
-                    {index > 0 && ", "}
-                    <Link href={`/category/${cat.slug}`} className="text-red-600 hover:underline">
-                      {cat.name}
-                    </Link>
-                  </span>
-                ))}
+            {/* Post metadata */}
+            <div className="flex flex-wrap items-center text-sm text-gray-500 mb-6">
+              {post.date && (
+                <span>Published: {new Date(post.date).toLocaleDateString()}</span>
+              )}
+              
+              {post.modified && post.modified !== post.date && (
+                <span className="ml-4">Updated: {new Date(post.modified).toLocaleDateString()}</span>
+              )}
+              
+              {post.categories.length > 0 && (
+                <div className="ml-4 flex items-center">
+                  <span className="mr-1">Categories:</span>
+                  {post.categories.map((cat, index) => (
+                    <span key={cat.id}>
+                      {index > 0 && ", "}
+                      <Link href={`/category/${cat.slug}`} className="text-red-600 hover:underline">
+                        {cat.name}
+                      </Link>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {/* Author info */}
+            {post.author && (
+              <div className="flex items-center mb-8">
+                {post.author.avatar && (
+                  <Image 
+                    src={post.author.avatar} 
+                    alt={post.author.name}
+                    width={40}
+                    height={40}
+                    className="rounded-full mr-3"
+                  />
+                )}
+                <span className="font-medium">By {post.author.name}</span>
               </div>
             )}
-          </div>
-          
-          {/* Author info */}
-          {post.author && (
-            <div className="flex items-center mb-8">
-              {post.author.avatar && (
-                <Image 
-                  src={post.author.avatar} 
-                  alt={post.author.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full mr-3"
-                />
-              )}
-              <span className="font-medium">By {post.author.name}</span>
-            </div>
-          )}
-          
-          {/* Featured image */}
-          {post.image_url && (
-            <div className="mb-8">
-              <Image
-                src={post.image_url}
-                alt={post.image_alt || post.title}
-                width={1200}
-                height={675}
-                className="w-full h-auto rounded-lg"
-              />
-            </div>
-          )}
-          
-          {/* Post content with preserved WordPress classes and enhanced styling */}
-          <article className="wp-content">
-            <div 
-              dangerouslySetInnerHTML={{ __html: post.content }}
-              className="prose prose-lg max-w-none"
-            />
-          </article>
-        </main>
-        
-        {/* Sidebar with recent posts */}
-        <aside className="lg:w-1/3 mt-8 lg:mt-0">
-          <div className="bg-gray-50 rounded-lg p-6 sticky top-8">
-            <h2 className="text-xl font-bold mb-4 text-gray-800 border-b border-gray-200 pb-2">Recent News</h2>
             
-            {recentPosts.length > 0 ? (
-              <div className="space-y-4">
-                {recentPosts.map(recentPost => (
-                  <Link 
-                    key={recentPost.id} 
-                    href={`/articles/${recentPost.slug}`}
-                    className="group block"
-                  >
-                    <div className="flex items-start gap-3">
-                      {recentPost.image_url && (
-                        <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded">
-                          <Image
-                            src={recentPost.image_url}
-                            alt=""
-                            width={80}
-                            height={80}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="text-sm font-medium group-hover:text-red-600 transition-colors line-clamp-2">
-                          {recentPost.title}
-                        </h3>
-                        <div className="flex items-center text-xs text-gray-500 mt-1">
-                          {recentPost.date && (
-                            <span>{new Date(recentPost.date).toLocaleDateString()}</span>
-                          )}
-                          {recentPost.category && (
-                            <>
-                              <span className="mx-1">•</span>
-                              <span className="text-red-600">{recentPost.category}</span>
-                            </>
-                          )}
+            {/* Featured image */}
+            {post.image_url && (
+              <div className="mb-8">
+                <Image
+                  src={post.image_url}
+                  alt={post.image_alt || post.title}
+                  width={1200}
+                  height={675}
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            )}
+            
+            {/* Post content with preserved WordPress classes and enhanced styling */}
+            <article className="wp-content">
+              <div 
+                dangerouslySetInnerHTML={{ __html: post.content }}
+                className="prose prose-lg max-w-none"
+              />
+            </article>
+          </main>
+          
+          {/* Sidebar with recent posts */}
+          <aside className="lg:w-1/3 mt-8 lg:mt-0">
+            <div className="bg-gray-50 rounded-lg p-6 sticky top-8">
+              <h2 className="text-xl font-bold mb-4 text-gray-800 border-b border-gray-200 pb-2">Recent News</h2>
+              
+              {recentPosts.length > 0 ? (
+                <div className="space-y-4">
+                  {recentPosts.map(recentPost => (
+                    <Link 
+                      key={recentPost.id} 
+                      href={`/articles/${recentPost.slug}`}
+                      className="group block"
+                    >
+                      <div className="flex items-start gap-3">
+                        {recentPost.image_url && (
+                          <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded">
+                            <Image
+                              src={recentPost.image_url}
+                              alt=""
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="text-sm font-medium group-hover:text-red-600 transition-colors line-clamp-2">
+                            {recentPost.title}
+                          </h3>
+                          <div className="flex items-center text-xs text-gray-500 mt-1">
+                            {recentPost.date && (
+                              <span>{new Date(recentPost.date).toLocaleDateString()}</span>
+                            )}
+                            {recentPost.category && (
+                              <>
+                                <span className="mx-1">•</span>
+                                <span className="text-red-600">{recentPost.category}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">No recent posts available.</p>
-            )}
-            
-            <Link href="/articles" className="text-red-600 hover:underline text-sm mt-4 inline-block">
-              View all posts →
-            </Link>
-          </div>
-        </aside>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">No recent posts available.</p>
+              )}
+              
+              <Link href="/articles" className="text-red-600 hover:underline text-sm mt-4 inline-block">
+                View all posts →
+              </Link>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </>
   )
-}
-
-// Generate metadata for SEO
-export async function generateMetadata({ params }) {
-  const resolvedParams = await params;
-  const slug = resolvedParams.slug;
-  const post = await getPost(slug)
-  
-  if (!post) {
-    return {
-      title: 'Post Not Found',
-      description: 'The requested post could not be found.'
-    }
-  }
-  
-  // Strip HTML tags from content for description
-  const description = post.content
-    .replace(/<[^>]*>/g, '')
-    .substring(0, 160)
-    .trim() + '...'
-  
-  return {
-    title: post.title,
-    description: description,
-    openGraph: {
-      title: post.title,
-      description: description,
-      type: 'article',
-      images: post.image_url ? [post.image_url] : [],
-      publishedTime: post.date,
-      modifiedTime: post.modified,
-      authors: [post.author.name],
-      tags: post.categories.map(cat => cat.name)
-    }
-  }
 }

@@ -167,8 +167,8 @@ const HomePage = async () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 max-w-7xl">
             
             {/* English Section */}
-            {firstEnglishPost && ( // Only render section if there's a post
-            <section aria-labelledby="latest-articles-title"> {/* Added aria-labelledby */}
+            {firstEnglishPost && ( 
+            <section aria-labelledby="latest-articles-title"> 
                 <div className="flex justify-between items-center mb-6">
                     <h2 id="latest-articles-title" className="text-3xl font-bold text-slate-800">Latest Articles</h2>
                     <Link 
@@ -182,7 +182,7 @@ const HomePage = async () => {
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="lg:col-span-7 xl:col-span-8"> {/* Adjusted span for potentially better balance */}
+                    <div className="lg:col-span-7 xl:col-span-8"> 
                         <FeaturedPostCard post={firstEnglishPost} language="articles" />
                     </div>
                     <div className="lg:col-span-5 xl:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">

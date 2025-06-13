@@ -6,9 +6,9 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Motor India - Buy & Sell Used Cars and Bikes',
-  description: 'India\'s most trusted platform for buying and selling used vehicles. Find the best deals on cars and bikes near you.',
-  keywords: 'used cars, used bikes, buy car, sell car, second hand vehicles, used vehicles india',
+  title: 'Motor India - India\'s #1 complete Automotive Platform | Car/Bike Research, Pricing & Reviews',
+  description: 'India\'s first full-stack automotive platform. Get accurate on-road car prices with our advanced RTO calculator, compare specifications, read expert reviews, and make informed car buying decisions across all Indian states.',
+  keywords: 'car prices india, rto calculator, on road price, car specifications, car comparison, new cars india, car reviews, automotive platform, motor india, car buying guide, vehicle research, car features, fuel efficiency, car variants',
 };
 
 export default function RootLayout({ children }) {

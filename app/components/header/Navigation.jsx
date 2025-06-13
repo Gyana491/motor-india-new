@@ -2,7 +2,7 @@ const Navigation = ({ isMobile }) => {
   const menuItems = [
     { label: 'Cars', href: '/cars' },
     { label: "News", href: '/hindi' },
-    { label: 'Contact Us', href: '/contact' },
+    { label: 'Contact Us', href: '/contact-us' },
   ];
 
   return (

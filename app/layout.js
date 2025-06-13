@@ -23,10 +23,11 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
-
-                {/* Google Analytics */}
+      </head>
+      <body className={inter.className}>
+        {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-L3ZNPXHSHV"
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZNEJZJF0JR"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -34,11 +35,9 @@ export default function RootLayout({ children }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-L3ZNPXHSHV');
+            gtag('config', 'G-ZNEJZJF0JR');
           `}
         </Script>
-      </head>
-      <body className={inter.className}>
         
         <Header />
         {children}

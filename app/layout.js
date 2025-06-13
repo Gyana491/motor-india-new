@@ -23,9 +23,8 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
-      </head>
-      <body className={inter.className}>
-        {/* Google Analytics */}
+
+                {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-L3ZNPXHSHV"
           strategy="afterInteractive"
@@ -38,6 +37,8 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-L3ZNPXHSHV');
           `}
         </Script>
+      </head>
+      <body className={inter.className}>
         
         <Header />
         {children}

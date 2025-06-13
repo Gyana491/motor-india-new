@@ -17,7 +17,7 @@ const Footer = () => {
                 <span className="font-medium">Email:</span>{' '}
                 <a 
                   href="mailto:support@motorindia.in" 
-                  className="text-purple-400 hover:text-purple-300 transition-colors"
+                  className="text-red-400 hover:text-red-300 transition-colors"
                 >
                   support@motorindia.in
                 </a>
@@ -29,13 +29,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <nav className="space-y-2">
-              <Link href="/cars" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/cars" className="block text-gray-300 hover:text-red-400 transition-colors">
                 Cars
               </Link>
-              <Link href="/hindi" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/hindi" className="block text-gray-300 hover:text-red-400 transition-colors">
                 News
               </Link>
-              <Link href="/contact" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/contact-us" className="block text-gray-300 hover:text-red-400 transition-colors">
                 Contact Us
               </Link>
             </nav>
@@ -45,13 +45,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Support</h3>
             <nav className="space-y-2">
-              <Link href="/contact" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/contact-us" className="block text-gray-300 hover:text-red-400 transition-colors">
                 Help Center
               </Link>
-              <Link href="/contact" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/contact-us" className="block text-gray-300 hover:text-red-400 transition-colors">
                 FAQ
               </Link>
-              <Link href="/contact" className="block text-gray-300 hover:text-white transition-colors">
+              <Link href="/contact-us" className="block text-gray-300 hover:text-red-400 transition-colors">
                 Car Pricing Help
               </Link>
             </nav>
@@ -65,10 +65,10 @@ const Footer = () => {
               © {new Date().getFullYear()} Motor India. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-red-400 text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link href="/terms-of-service" className="text-gray-400 hover:text-red-400 text-sm transition-colors">
                 Terms of Service
               </Link>
             </div>

@@ -1,15 +1,28 @@
 import Image from 'next/image'
-import { getAllBrands, getFeaturedImage } from '@/app/lib/api';
+import { getFeaturedImage } from '@/app/lib/api';
 
-// Using the centralized API function that includes proper caching
+const getAllBrands = async () => {
+  const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?per_page=100`, {
+    next: { revalidate: 3600 } // Cache for 1 hour
+  })
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch brands: ${response.status}`);
+  }
+  
+  const brands = await response.json()
+  return brands
+}
+
 export default async function Cars() {
-  const brands = await getAllBrands();
+  const brands = await getAllBrands()
 
-  // Fetch featured images for each brand using cached getFeaturedImage
+  // Fetch featured images for each brand
   const brandsWithImages = await Promise.all(
     brands.map(async (brand) => {
       let imageUrl = null;
       
+      // Check if we have a featured_image (which contains the ID)
       if (brand.acf?.featured_image) {
         imageUrl = await getFeaturedImage(brand.acf.featured_image);
       }
@@ -31,28 +44,30 @@ export default async function Cars() {
             href={`/cars/${brand.slug}`}
             className="p-4 border rounded-lg hover:shadow-lg transition-shadow"
           >
-            {brand.featuredImageUrl && (
-              <div className="aspect-w-16 aspect-h-9 mb-4">
-                <Image
-                  src={brand.featuredImageUrl}
-                  alt={brand.title?.rendered || 'Car brand'}
-                  width={300}
-                  height={169}
-                  className="object-cover rounded"
-                />
+            {/* Use a fallback image or brand initial if no logo is available */}
+            {brand.featuredImageUrl ? (
+              <Image 
+                src={brand.featuredImageUrl} 
+                alt={brand.name}
+                width={96}
+                height={96}
+                className="w-24 h-24 object-contain mx-auto mb-4"
+              />
+            ) : (
+              <div className="w-24 h-24 flex items-center justify-center bg-gray-100 rounded-full mx-auto mb-4">
+                <span className="text-3xl font-bold text-gray-500">{brand.name.charAt(0)}</span>
               </div>
             )}
-            <h2 className="text-lg font-semibold">
-              {brand.title?.rendered || 'Brand Name'}
-            </h2>
+            <h2 className="text-xl font-semibold text-center">{brand.name}</h2>
+            <p className="text-sm text-center text-gray-500">{brand.count} models</p>
           </a>
         ))}
       </div>
     </main>
-  );
+  )
 }
 
-// Add metadata for SEO with cache headers
+// Add metadata for SEO
 export async function generateMetadata() {
   return {
     title: 'Browse All Car Brands | Motor India',
@@ -61,9 +76,6 @@ export async function generateMetadata() {
       title: 'Browse All Car Brands | Motor India',
       description: 'Explore all car brands available in India. Find detailed information, specifications, prices, and more for your favorite car brands.',
       type: 'website',
-    },
-    headers: {
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=7200'
     }
   }
 }

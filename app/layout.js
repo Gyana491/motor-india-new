@@ -23,6 +23,8 @@ export default function RootLayout({ children }) {
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="google-adsense-account" content="ca-pub-9080063031692265" />
+        
       </head>
       <body className={inter.className}>
         {/* Google Analytics */}

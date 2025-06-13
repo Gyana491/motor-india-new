@@ -270,7 +270,7 @@ const PrivacyPolicyPage = () => {
 
           {/* Children's Privacy */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Children's Privacy</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Children&apos;s Privacy</h2>
             <p className="text-gray-600">
               Motor India is not intended for children under 18 years of age. We do not knowingly collect 
               personal information from children. If you are a parent or guardian and believe your child 
@@ -298,7 +298,7 @@ const PrivacyPolicyPage = () => {
               </p>
               <p className="text-gray-600">
                 We will notify you of any material changes by posting the updated policy on this page 
-                and updating the "Last updated" date. We encourage you to review this policy periodically.
+                and updating the &quot;Last updated&quot; date. We encourage you to review this policy periodically.
               </p>
             </div>
           </section>

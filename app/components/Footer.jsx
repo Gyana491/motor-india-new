@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <h3 className="text-lg font-bold mb-4">Motor India</h3>
             <p className="text-gray-300 mb-4">
-              India's #1 complete automotive platform. Get accurate on-road car prices, 
+              India&apos;s #1 complete automotive platform. Get accurate on-road car prices, 
               compare specifications, read expert reviews, and make informed car buying decisions.
             </p>
             <div className="space-y-2">

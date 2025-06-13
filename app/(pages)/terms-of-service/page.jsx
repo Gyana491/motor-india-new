@@ -19,7 +19,7 @@ const TermsOfServicePage = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            These terms govern your use of Motor India's automotive platform. 
+            These terms govern your use of Motor India&apos;s automotive platform. 
             Please read them carefully before using our services.
           </p>
           <p className="text-sm text-gray-500 mt-4">
@@ -39,7 +39,7 @@ const TermsOfServicePage = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
             <div className="space-y-3">
               <p className="text-gray-600">
-                By accessing and using Motor India ("we," "our," or "us"), you accept and agree to be bound 
+                By accessing and using Motor India (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), you accept and agree to be bound 
                 by the terms and provision of this agreement.
               </p>
               <p className="text-gray-600">
@@ -197,7 +197,7 @@ const TermsOfServicePage = () => {
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-800 mb-2">Service Disclaimer</h4>
                 <p className="text-gray-600 text-sm">
-                  Motor India is provided "as is" and "as available" without warranties of any kind, 
+                  Motor India is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, 
                   either express or implied. We do not warrant that the service will be uninterrupted, 
                   error-free, or free of viruses or other harmful components.
                 </p>

@@ -45,7 +45,7 @@ const ContactPage = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have questions about cars, pricing, or need assistance? We're here to help you make informed automotive decisions.
+            Have questions about cars, pricing, or need assistance? We&apos;re here to help you make informed automotive decisions.
           </p>
         </div>
 
@@ -130,7 +130,7 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Thank you for contacting us!</h3>
-                <p className="text-gray-600">We've received your message and will get back to you soon.</p>
+                <p className="text-gray-600">We&apos;ve received your message and will get back to you soon.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">

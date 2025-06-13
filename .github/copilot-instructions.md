@@ -114,6 +114,28 @@ export default ComponentName;
 
 ## Development Workflow
 
+### Pre-Development Checklist ✅
+Before starting any development work:
+1. **Review existing code patterns** in similar components
+2. **Check for any unescaped entities** in text content
+3. **Verify all imports are used** and necessary
+4. **Ensure proper error handling** is in place
+5. **Plan responsive design approach** from the start
+
+### During Development
+1. **Use consistent naming conventions** as outlined above
+2. **Write semantic, accessible HTML**
+3. **Escape all special characters in JSX content immediately**
+4. **Add proper TypeScript/JSDoc comments** where needed
+5. **Test on multiple screen sizes continuously**
+
+### Post-Development Validation
+1. **Run `npm run build`** to catch build errors early
+2. **Fix any ESLint warnings immediately**
+3. **Test all interactive features**
+4. **Verify SEO metadata is correct**
+5. **Check loading states and error boundaries**
+
 ### Key Features to Maintain
 1. **Multilingual Support** - English/Hindi content
 2. **SEO Optimization** - Comprehensive sitemap generation
@@ -201,6 +223,125 @@ export default ComponentName;
 - Implement proper error handling
 - Follow React hooks guidelines
 - Optimize component re-renders
+- **ALWAYS escape special characters in JSX content to prevent `react/no-unescaped-entities` errors**
+
+### React Unescaped Entities Prevention ⚠️ CRITICAL
+**Always escape these characters in JSX content:**
+
+#### Apostrophes and Single Quotes
+```jsx
+// ❌ WRONG - Will cause build errors
+<p>Don't use unescaped apostrophes</p>
+<h1>India's #1 Platform</h1>
+
+// ✅ CORRECT - Use HTML entities
+<p>Don&apos;t use unescaped apostrophes</p>
+<h1>India&apos;s #1 Platform</h1>
+```
+
+#### Double Quotes
+```jsx
+// ❌ WRONG - Will cause build errors
+<p>We provide "as is" service</p>
+<p>Updated the "Last updated" date</p>
+
+// ✅ CORRECT - Use HTML entities
+<p>We provide &quot;as is&quot; service</p>
+<p>Updated the &quot;Last updated&quot; date</p>
+```
+
+#### Complete HTML Entity Reference
+- `'` → `&apos;` (apostrophe/single quote)
+- `"` → `&quot;` (double quote)
+- `&` → `&amp;` (ampersand)
+- `<` → `&lt;` (less than)
+- `>` → `&gt;` (greater than)
+
+#### Pre-Build Validation Checklist
+Before committing code, always check for:
+1. **Unescaped apostrophes** in text content (don't, won't, India's, etc.)
+2. **Unescaped quotes** in descriptive text ("as is", "Last updated", etc.)
+3. **Proper JSX attribute quoting** (use double quotes for attributes)
+4. **Consistent indentation and formatting**
+
+### Common ESLint Error Patterns to Avoid
+
+#### 1. React Unescaped Entities (`react/no-unescaped-entities`)
+```jsx
+// ❌ These will fail build
+<p>We're here to help</p>
+<p>Don't worry about pricing</p>
+<p>Check "latest updates" here</p>
+<h2>Children's Safety</h2>
+
+// ✅ Correct versions
+<p>We&apos;re here to help</p>
+<p>Don&apos;t worry about pricing</p>
+<p>Check &quot;latest updates&quot; here</p>
+<h2>Children&apos;s Safety</h2>
+```
+
+#### 2. Missing Dependencies in useEffect (`react-hooks/exhaustive-deps`)
+```jsx
+// ❌ Missing dependencies
+useEffect(() => {
+  fetchCarData(brand, model);
+}, []); // brand and model should be in deps
+
+// ✅ Include all dependencies
+useEffect(() => {
+  fetchCarData(brand, model);
+}, [brand, model]);
+```
+
+#### 3. Unused Variables (`no-unused-vars`)
+```jsx
+// ❌ Unused import
+import React, { useState, useEffect } from 'react'; // useEffect not used
+
+// ✅ Only import what you use
+import React, { useState } from 'react';
+```
+
+#### 4. Missing Keys in Lists (`react/jsx-key`)
+```jsx
+// ❌ Missing key prop
+{cars.map(car => <CarCard car={car} />)}
+
+// ✅ Always provide keys
+{cars.map(car => <CarCard key={car.id} car={car} />)}
+```
+
+### Build Error Prevention Strategy
+
+#### Before Every Commit
+1. **Run the build command**: `npm run build`
+2. **Fix all ESLint warnings and errors**
+3. **Test responsive design on mobile/tablet/desktop**
+4. **Verify all dynamic routes work correctly**
+5. **Check console for any runtime errors**
+
+#### Text Content Guidelines
+When writing any user-facing text content:
+
+1. **Always use HTML entities for special characters**
+2. **Avoid contractions when possible** (use "do not" instead of "don't")
+3. **If contractions are necessary, always escape the apostrophe**
+4. **Use proper quotation entities for quoted text**
+5. **Be consistent with punctuation and formatting**
+
+#### Component Text Examples
+```jsx
+// ✅ Motor India specific examples
+const MotorIndiaText = {
+  tagline: "India&apos;s #1 Complete Automotive Platform",
+  contactMessage: "We&apos;re here to help you make informed decisions",
+  serviceDisclaimer: "Motor India is provided &quot;as is&quot; without warranties",
+  privacyNote: "Check our &quot;Privacy Policy&quot; for details",
+  childrenSection: "Children&apos;s Privacy Protection",
+  userFeedback: "We&apos;ve received your message successfully"
+};
+```
 
 ### Accessibility
 - Semantic HTML elements
@@ -226,13 +367,47 @@ When working on this project, always consider:
 7. **Mobile-first Design** - Automotive users are mobile-heavy
 
 ### Preferred Development Approach
-1. Read existing code patterns before implementing new features
-2. Maintain consistency with established file structure
-3. Use existing utility functions and services
-4. Follow the component composition patterns
-5. Ensure responsive and accessible design
-6. Test multilingual functionality
-7. Validate SEO and performance impact
+1. **Read existing code patterns** before implementing new features
+2. **Maintain consistency** with established file structure
+3. **Use existing utility functions** and services
+4. **Follow component composition patterns**
+5. **Ensure responsive and accessible design**
+6. **Test multilingual functionality**
+7. **Validate SEO and performance impact**
+8. **Always escape special characters in JSX content** ⚠️
+9. **Run build validation before committing** ⚠️
+
+### Critical Error Prevention Rules 🚨
+
+#### MANDATORY: Always Escape These Characters in JSX
+- `'` → `&apos;` (Motor India&apos;s, Don&apos;t, We&apos;re)
+- `"` → `&quot;` (Check &quot;Privacy Policy&quot;, &quot;as is&quot;)
+- `&` → `&amp;` (when used as text, not entity)
+- `<` → `&lt;` (mathematical expressions)
+- `>` → `&gt;` (mathematical expressions)
+
+#### MANDATORY: Build Validation Workflow
+```bash
+# Before every commit, run these commands:
+npm run build          # Check for build errors
+npm run lint          # Check for ESLint issues  
+npm start            # Test local functionality
+```
+
+#### Common Motor India Text Patterns to Watch
+```jsx
+// ❌ THESE WILL BREAK BUILD
+"India's automotive platform"
+"We're committed to quality"
+"Check our "Privacy Policy" page"
+"Children's safety is important"
+
+// ✅ CORRECT VERSIONS
+"India&apos;s automotive platform"
+"We&apos;re committed to quality" 
+"Check our &quot;Privacy Policy&quot; page"
+"Children&apos;s safety is important"
+```
 
 This project serves automotive enthusiasts and car buyers in India, requiring attention to local market needs, pricing structures, and user behavior patterns specific to the Indian automotive market.
 

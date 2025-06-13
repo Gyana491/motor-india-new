@@ -7,8 +7,9 @@ import {
   generateNewsSitemapEntry
 } from '../../lib/sitemapUtils';
 
-// Force dynamic generation to ensure fresh data
+// Force dynamic generation with real-time data for news
 export const dynamic = 'force-dynamic';
+export const revalidate = 0; // No caching - always fresh news data
 
 /**
  * Generate Google News sitemap for recent posts (both English and Hindi)
@@ -64,7 +65,10 @@ export async function GET() {
 
     return new Response(xmlContent, {
       headers: {
-        ...getSitemapHeaders(1800), // 30 minutes cache for news
+        'Content-Type': 'application/xml',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
         'X-Robots-Tag': 'index, follow, max-snippet:-1, max-image-preview:large'
       }
     });

@@ -1,5 +1,3 @@
-import { Metadata } from 'next';
-
 export const metadata = {
   title: 'Privacy Policy - Motor India | How We Protect Your Data',
   description: 'Learn how Motor India collects, uses, and protects your personal information. Our privacy policy outlines data handling practices for our automotive platform.',

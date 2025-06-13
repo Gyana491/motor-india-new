@@ -1,12 +1,10 @@
-import { Metadata } from 'next';
-
 export const metadata = {
   title: 'Terms of Service - Motor India | User Agreement',
-  description: 'Read Motor India\'s terms of service and user agreement. Understand the rules and guidelines for using our automotive platform.',
+  description: 'Read Motor India&apos;s terms of service and user agreement. Understand the rules and guidelines for using our automotive platform.',
   keywords: 'terms of service, user agreement, motor india, terms and conditions, website terms, automotive platform',
   openGraph: {
     title: 'Terms of Service - Motor India',
-    description: 'Motor India\'s terms of service and user agreement for our automotive platform.',
+    description: 'Motor India&apos;s terms of service and user agreement for our automotive platform.',
     type: 'website',
   },
 };

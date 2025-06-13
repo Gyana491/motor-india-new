@@ -1,7 +1,8 @@
 import wordpressService from '@/lib/services/wordpressService';
 
-// Force dynamic generation to ensure fresh data
+// Force dynamic generation with real-time data updates
 export const dynamic = 'force-dynamic';
+export const revalidate = 0; // No caching - always fresh data
 
 /**
  * Generate sitemap for all English article categories

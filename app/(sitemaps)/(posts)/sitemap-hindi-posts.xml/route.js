@@ -1,7 +1,8 @@
 import wordpressService from '@/lib/services/wordpressService';
 
-// Force dynamic generation to ensure fresh data
+// Force dynamic generation with real-time data updates
 export const dynamic = 'force-dynamic';
+export const revalidate = 0; // No caching - always fresh data
 
 /**
  * Generate sitemap for all Hindi posts
@@ -48,7 +49,9 @@ export async function GET() {
     return new Response(xmlContent, {
       headers: {
         'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
         'X-Robots-Tag': 'index, follow'
       }
     });

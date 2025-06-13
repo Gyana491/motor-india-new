@@ -78,6 +78,17 @@ const nextConfig = {
             },
         ];
     },
+
+    // Optimize build performance
+    experimental: {
+        staticWorkerRequestDeduping: true,
+        optimizePackageImports: ['@/lib', '@/components'],
+    },
+
+    // Generate options for better static optimization
+    generateBuildId: async () => {
+        return `build-${Date.now()}`;
+    },
 };
 
 export default nextConfig;

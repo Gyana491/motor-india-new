@@ -2,6 +2,7 @@ import { BACKEND } from '@/app/utils/constants';
 
 // Add this line to prevent static generation at build time
 export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // 1 hour
 
 async function getAllProducts() {
   let allProducts = [];

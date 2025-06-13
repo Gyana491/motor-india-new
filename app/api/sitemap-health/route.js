@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import wordpressService from '@/lib/services/wordpressService';
 
+// Force dynamic for health checks to get real-time data
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 /**
  * Sitemap Health Check API
  * Provides status and statistics for all sitemaps
@@ -9,7 +13,7 @@ export async function GET() {
   try {
     const startTime = Date.now();
     
-    // Collect data from all sources
+    // Collect data from all sources with individual error handling
     const [
       englishPosts,
       hindiPosts,
@@ -17,14 +21,16 @@ export async function GET() {
       hindiCategories,
       tags,
       hindiTags
-    ] = await Promise.all([
-      wordpressService.getAllPosts(1, 10).catch(() => []),
-      wordpressService.getAllHindiPosts(1, 10).catch(() => []),
-      wordpressService.getAllCategories().catch(() => []),
-      wordpressService.getAllHindiCategories().catch(() => []),
-      wordpressService.getAllTags().catch(() => []),
-      wordpressService.getAllHindiTags().catch(() => [])
-    ]);
+    ] = await Promise.allSettled([
+      wordpressService.getAllPosts(1, 10),
+      wordpressService.getAllHindiPosts(1, 10),
+      wordpressService.getAllCategories(),
+      wordpressService.getAllHindiCategories(),
+      wordpressService.getAllTags(),
+      wordpressService.getAllHindiTags()
+    ]).then(results => results.map(result => 
+      result.status === 'fulfilled' ? result.value : []
+    ));
 
     const endTime = Date.now();
     const responseTime = endTime - startTime;
@@ -52,8 +58,9 @@ export async function GET() {
           lastUpdate: new Date().toISOString()
         },
         'sitemap-hindi-categories.xml': {
-          status: 'healthy',
+          status: hindiCategories.length > 0 ? 'healthy' : 'minimal',
           count: hindiCategories.length,
+          note: hindiCategories.length === 0 ? 'Hindi categories endpoint not available - showing fallback content' : undefined,
           lastUpdate: new Date().toISOString()
         },
         'sitemap-article-tags.xml': {
@@ -62,8 +69,9 @@ export async function GET() {
           lastUpdate: new Date().toISOString()
         },
         'sitemap-hindi-tags.xml': {
-          status: 'healthy',
+          status: hindiTags.length > 0 ? 'healthy' : 'minimal',
           count: hindiTags.length,
+          note: hindiTags.length === 0 ? 'Hindi tags endpoint not available - showing fallback content' : undefined,
           lastUpdate: new Date().toISOString()
         },
         'sitemap-news.xml': {

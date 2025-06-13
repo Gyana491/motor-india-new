@@ -10,8 +10,9 @@ import {
   isRecentPost
 } from '../../lib/sitemapUtils';
 
-// Force dynamic generation to ensure fresh data
+// Force dynamic generation with real-time data updates
 export const dynamic = 'force-dynamic';
+export const revalidate = 0; // No caching - always fresh data
 
 /**
  * Generate sitemap for all English articles/posts
@@ -43,7 +44,13 @@ export async function GET() {
 </urlset>`;
 
     return new Response(xmlContent, {
-      headers: getSitemapHeaders(3600)
+      headers: {
+        'Content-Type': 'application/xml',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'X-Robots-Tag': 'index, follow'
+      }
     });
 
   } catch (error) {

@@ -473,19 +473,6 @@
 
 /* Premium typography enhancements */
 
-/* Drop caps for first paragraph after headings */
-.wp-content h1 + p:first-letter,
-.wp-content h2 + p:first-letter {
-  float: left;
-  font-size: 3.5em;
-  line-height: 0.8;
-  padding-right: 0.1em;
-  padding-top: 0.1em;
-  margin-bottom: -0.1em;
-  font-weight: 600;
-  color: #DC2626;
-}
-
 /* Special text highlighting classes */
 .wp-content .highlight-primary {
   background: linear-gradient(transparent 50%, rgba(220, 38, 38, 0.15) 50%);

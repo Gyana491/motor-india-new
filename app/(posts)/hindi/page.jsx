@@ -2,7 +2,9 @@ import Link from "next/link"
 import Image from "next/image"
 
 const getPosts = async () => {
-    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/hindi?_embed=true`)
+    const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/hindi?_embed=true`, {
+      cache: "no-store"
+    })
     const data = await response.json()
     
     // Transform WordPress data to a more usable format

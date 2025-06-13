@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://motorindia.com/sitemap.xml
+# Sitemaps
+Sitemap: https://motorindia.in/sitemap.xml
+Sitemap: https://motorindia.in/sitemap-news.xml
 
 # Disallow certain directories if needed
 Disallow: /api/

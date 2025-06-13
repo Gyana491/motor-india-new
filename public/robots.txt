@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://motorindia.com/sitemap.xml
+
+# Disallow certain directories if needed
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /private/
+
+# Allow important pages
+Allow: /cars/
+Allow: /articles/
+Allow: /hindi/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1

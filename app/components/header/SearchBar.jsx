@@ -10,17 +10,29 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [imageUrls, setImageUrls] = useState({});
   const searchRef = useRef(null);
 
-  const fetchMediaDetails = async (mediaId) => {
+  // Simplified image fetching function using our API route
+  const fetchImageUrl = async (mediaId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/wp-json/wp/v2/media/${mediaId}`);
-      if (!response.ok) throw new Error('Failed to fetch media');
+      if (!mediaId) return null;
+
+      const response = await fetch(`/api/media?id=${mediaId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        console.warn(`Failed to fetch media ${mediaId}: ${response.status}`);
+        return null;
+      }
+
       const data = await response.json();
-      return data.media_details.sizes.thumbnail.source_url;
+      return data.imageUrl || null;
     } catch (error) {
-      console.error('Media fetch error:', error);
+      console.warn('Image fetch error for media ID:', mediaId, error.message);
       return null;
     }
   };
@@ -34,24 +46,79 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
 
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND}/wp-json/wp/v2/car?search=${encodeURIComponent(searchValue)}&_fields=id,title,slug,acf,featured_media&per_page=5`
-        );
-        if (!response.ok) throw new Error('Failed to fetch');
+        // Check if environment variable is available
+        if (!process.env.NEXT_PUBLIC_BACKEND) {
+          console.error('NEXT_PUBLIC_BACKEND environment variable is not defined');
+          setSuggestions([]);
+          return;
+        }
+
+        // Create timeout controller
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        let response;
+        try {
+          response = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND}/wp-json/wp/v2/car?search=${encodeURIComponent(searchValue)}&_fields=id,title,slug,acf,featured_media&per_page=5`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              signal: controller.signal,
+              mode: 'cors',
+              credentials: 'omit'
+            }
+          );
+          clearTimeout(timeoutId);
+        } catch (fetchError) {
+          clearTimeout(timeoutId);
+          if (fetchError.name === 'AbortError') {
+            console.warn('Search request timeout');
+          } else {
+            console.warn('Search fetch error:', fetchError.message);
+          }
+          throw fetchError;
+        }
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
-        // Fetch media URLs for each car that has featured_media
-        const mediaPromises = data.map(async (car) => {
-          if (car.acf?.featured_image) {
-            const mediaUrl = await fetchMediaDetails(car.acf.featured_image);
-            if (mediaUrl) {
-              setImageUrls(prev => ({ ...prev, [car.id]: mediaUrl }));
+        // Fetch images for cars with featured_image and attach them to the car objects
+        const carsWithImages = await Promise.allSettled(
+          data.map(async (car) => {
+            if (car.acf?.featured_image) {
+              try {
+                const imageUrl = await fetchImageUrl(car.acf.featured_image);
+                return {
+                  ...car,
+                  imageUrl: imageUrl || null
+                };
+              } catch (error) {
+                console.warn(`Failed to fetch image for car ${car.id}:`, error);
+                return {
+                  ...car,
+                  imageUrl: null
+                };
+              }
             }
-          }
-        });
+            return {
+              ...car,
+              imageUrl: null
+            };
+          })
+        );
+
+        // Extract successful results
+        const successfulResults = carsWithImages
+          .filter(result => result.status === 'fulfilled')
+          .map(result => result.value);
         
-        await Promise.all(mediaPromises);
-        setSuggestions(data);
+        setSuggestions(successfulResults);
       } catch (error) {
         console.error('Search error:', error);
         setSuggestions([]);
@@ -176,9 +243,9 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
                   }}
                 >
                   <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-md overflow-hidden relative">
-                    {car.acf?.featured_image && imageUrls[car.id] ? (
+                    {car.imageUrl ? (
                       <Image
-                        src={imageUrls[car.id]}
+                        src={car.imageUrl}
                         alt={car.title.rendered}
                         width={48}
                         height={48}

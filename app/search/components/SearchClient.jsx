@@ -1,28 +1,22 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const fetchMediaDetails = async (mediaId) => {
+// Function to fetch image from media ID (client-side)
+const fetchImageUrl = async (mediaId) => {
   try {
+    if (!process.env.NEXT_PUBLIC_BACKEND || !mediaId) return null;
+    
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/wp-json/wp/v2/media/${mediaId}`);
-    if (!response.ok) throw new Error('Failed to fetch media');
+    if (!response.ok) return null;
+    
     const data = await response.json();
-    
-    // Use medium_large (768px) or large (1024px) for better quality, fallback to medium (300px), then thumbnail
-    const sizes = data.media_details?.sizes;
-    if (!sizes) return null;
-    
-    // Prefer medium_large for good quality without being too large
-    return sizes.medium_large?.source_url || 
-           sizes.large?.source_url || 
-           sizes.medium?.source_url || 
-           sizes.thumbnail?.source_url || 
-           null;
+    return data.source_url || data.guid?.rendered || null;
   } catch (error) {
-    console.error('Media fetch error:', error);
+    console.error('Error fetching image:', error);
     return null;
   }
 };
@@ -37,15 +31,61 @@ const constructCarUrl = (car) => {
   return `/cars/${cleanBrandName}/${cleanModelSlug}`;
 };
 
-export default function SearchClient({ initialQuery, initialResults }) {
+export default function SearchClient({ initialQuery, initialResults, currentSort, currentFilter }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(initialQuery || '');
-  const [imageUrls, setImageUrls] = useState({});
-  const [sortBy, setSortBy] = useState('relevance');
-  const [filterBy, setFilterBy] = useState('all');
+  const [sortBy, setSortBy] = useState(currentSort || 'relevance');
+  const [filterBy, setFilterBy] = useState(currentFilter || 'all');
+  const [clientResults, setClientResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Function to perform client-side search with image loading
+  const performClientSearch = async (query) => {
+    if (!query || query.length < 2) {
+      setClientResults([]);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND}/wp-json/wp/v2/car?search=${encodeURIComponent(query)}&_fields=id,title,slug,acf,featured_media&per_page=50`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+
+      const results = await response.json();
+      
+      // Fetch images for each result
+      const resultsWithImages = await Promise.all(
+        results.map(async (car) => {
+          let imageUrl = null;
+          if (car.acf?.featured_image) {
+            imageUrl = await fetchImageUrl(car.acf.featured_image);
+          }
+          return {
+            ...car,
+            imageUrl
+          };
+        })
+      );
+
+      setClientResults(resultsWithImages);
+    } catch (error) {
+      console.error('Client search error:', error);
+      setClientResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const processedResults = useMemo(() => {
-    let results = Array.isArray(initialResults) ? [...initialResults] : [];
+    // Use clientResults if available (from client-side search), otherwise use initialResults (from SSR)
+    const resultsToProcess = clientResults !== null ? clientResults : (Array.isArray(initialResults) ? initialResults : []);
+    let results = [...resultsToProcess];
+    
     if (sortBy === 'name') {
       results.sort((a, b) => (a.title?.rendered || '').localeCompare(b.title?.rendered || ''));
     } else if (sortBy === 'brand') {
@@ -55,32 +95,20 @@ export default function SearchClient({ initialQuery, initialResults }) {
       results = results.filter((car) => car.acf?.model_type?.toLowerCase().includes(filterBy.toLowerCase()));
     }
     return results;
-  }, [initialResults, sortBy, filterBy]);
+  }, [initialResults, clientResults, sortBy, filterBy]);
 
   const totalResults = processedResults.length;
 
-  useEffect(() => {
-    const loadImages = async () => {
-      const tasks = processedResults.map(async (car) => {
-        if (car && car.id && car.acf?.featured_image && !imageUrls[car.id]) {
-          const url = await fetchMediaDetails(car.acf.featured_image);
-          if (url) {
-            setImageUrls((prev) => ({ ...prev, [car.id]: url }));
-          }
-        }
-      });
-      await Promise.all(tasks);
-    };
-    loadImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [processedResults]);
-
-  const handleNewSearch = (e) => {
+  const handleNewSearch = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const newQuery = (formData.get('search') || '').toString();
     if (newQuery) {
-      router.push(`/search?q=${encodeURIComponent(newQuery)}`);
+      setSearchQuery(newQuery);
+      // Update URL without refresh
+      window.history.pushState({}, '', `/search?q=${encodeURIComponent(newQuery)}`);
+      // Perform client-side search with image loading
+      await performClientSearch(newQuery);
     }
   };
 
@@ -179,7 +207,7 @@ export default function SearchClient({ initialQuery, initialResults }) {
         )}
 
         {/* No Results State */}
-        {searchQuery && processedResults.length === 0 && (
+        {!loading && searchQuery && processedResults.length === 0 && (
           <div className="text-center py-12">
             <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.291-1.002-5.824-2.582m0 0A7.962 7.962 0 016 9c0-.34.021-.677.06-1.009m5.824 2.582A7.963 7.963 0 0112 9a7.963 7.963 0 00-.176-1.581" />
@@ -190,8 +218,16 @@ export default function SearchClient({ initialQuery, initialResults }) {
           </div>
         )}
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+            <p className="mt-4 text-gray-600">Searching for cars...</p>
+          </div>
+        )}
+
         {/* Search Results */}
-        {processedResults.length > 0 && (
+        {!loading && processedResults.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {processedResults.map((car) => (
               <Link
@@ -201,9 +237,9 @@ export default function SearchClient({ initialQuery, initialResults }) {
               >
                 {/* Car Image */}
                 <div className="relative h-48 overflow-hidden bg-gray-100">
-                  {car.acf?.featured_image && imageUrls[car.id] ? (
+                  {car.imageUrl ? (
                     <Image
-                      src={imageUrls[car.id]}
+                      src={car.imageUrl}
                       alt={car.title?.rendered || 'Car image'}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

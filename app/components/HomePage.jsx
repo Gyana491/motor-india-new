@@ -1,5 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
+import { getFeaturedImage } from '@/lib/api'
+import FeaturedCarsSection from './FeaturedCarsSection'
 
 const cleanHtmlEntities = (text) => {
     if (!text) return text;
@@ -54,6 +56,166 @@ const getHindiPosts = async () => {
         image_alt: cleanHtmlEntities(post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || ''),
         category: cleanHtmlEntities(post._embedded?.['wp:term']?.[0]?.[0]?.name || null)
     }))
+}
+
+const getFeaturedCarBrands = async () => {
+    try {
+        const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?per_page=8&orderby=count&order=desc`, {
+            next: { revalidate: 3600 }, // Cache for 1 hour
+            headers: {
+                'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=7200'
+            }
+        })
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch brands: ${response.status}`)
+        }
+        
+        const brands = await response.json()
+        
+        // Fetch featured images for each brand
+        const brandsWithImages = await Promise.all(
+            brands.map(async (brand) => {
+                let imageUrl = null
+                
+                try {
+                    // Check if we have a featured_image (which contains the ID)
+                    if (brand.acf?.featured_image) {
+                        imageUrl = await getFeaturedImage(brand.acf.featured_image)
+                    }
+                } catch (error) {
+                    console.error(`Error fetching image for brand ${brand.name}:`, error)
+                }
+                
+                return {
+                    id: brand.id,
+                    name: brand.name,
+                    slug: brand.slug,
+                    count: brand.count,
+                    featuredImageUrl: imageUrl
+                }
+            })
+        )
+        
+        return brandsWithImages
+    } catch (error) {
+        console.error('Error fetching car brands:', error)
+        return []
+    }
+}
+
+const getFeaturedCars = async () => {
+    // Return static featured cars data instead of API calls
+    return [
+        {
+            id: 1,
+            name: 'Maruti Suzuki Swift',
+            slug: 'swift',
+            brand: 'Maruti Suzuki',
+            brandSlug: 'maruti-suzuki',
+            bodyType: 'Hatchback',
+            priceRange: '5.85 - 9.45 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The Swift is a stylish and fuel-efficient hatchback that offers great value for money.'
+        },
+        {
+            id: 2,
+            name: 'Hyundai Creta',
+            slug: 'creta',
+            brand: 'Hyundai',
+            brandSlug: 'hyundai',
+            bodyType: 'SUV',
+            priceRange: '10.87 - 18.17 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The Creta is a premium SUV with modern design and advanced features.'
+        },
+        {
+            id: 3,
+            name: 'Honda City',
+            slug: 'city',
+            brand: 'Honda',
+            brandSlug: 'honda',
+            bodyType: 'Sedan',
+            priceRange: '11.82 - 15.32 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The City offers a perfect blend of comfort, performance, and reliability.'
+        },
+        {
+            id: 4,
+            name: 'Mahindra Scorpio',
+            slug: 'scorpio',
+            brand: 'Mahindra',
+            brandSlug: 'mahindra',
+            bodyType: 'SUV',
+            priceRange: '13.59 - 17.35 Lakh',
+            fuelType: 'Diesel',
+            featuredImageUrl: null,
+            excerpt: 'The Scorpio is known for its rugged design and excellent off-road capabilities.'
+        },
+        {
+            id: 5,
+            name: 'Tata Nexon',
+            slug: 'nexon',
+            brand: 'Tata',
+            brandSlug: 'tata',
+            bodyType: 'SUV',
+            priceRange: '7.99 - 14.49 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The Nexon combines modern technology with adventurous spirit.'
+        },
+        {
+            id: 6,
+            name: 'Kia Seltos',
+            slug: 'seltos',
+            brand: 'Kia',
+            brandSlug: 'kia',
+            bodyType: 'SUV',
+            priceRange: '10.90 - 18.40 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The Seltos offers bold design and cutting-edge features.'
+        },
+        {
+            id: 7,
+            name: 'Toyota Fortuner',
+            slug: 'fortuner',
+            brand: 'Toyota',
+            brandSlug: 'toyota',
+            bodyType: 'SUV',
+            priceRange: '32.58 - 50.34 Lakh',
+            fuelType: 'Diesel',
+            featuredImageUrl: null,
+            excerpt: 'The Fortuner is a premium SUV known for its durability and luxury.'
+        },
+        {
+            id: 8,
+            name: 'Volkswagen Polo',
+            slug: 'polo',
+            brand: 'Volkswagen',
+            brandSlug: 'volkswagen',
+            bodyType: 'Hatchback',
+            priceRange: '6.50 - 10.25 Lakh',
+            fuelType: 'Petrol',
+            featuredImageUrl: null,
+            excerpt: 'The Polo offers German engineering with a sporty design.'
+        }
+    ]
+}
+
+const getCarBodyTypes = async () => {
+    // Return static body types data instead of API calls
+    return [
+        { id: 1, name: 'Hatchback', slug: 'hatchback', count: 25 },
+        { id: 2, name: 'Sedan', slug: 'sedan', count: 18 },
+        { id: 3, name: 'SUV', slug: 'suv', count: 32 },
+        { id: 4, name: 'MUV', slug: 'muv', count: 12 },
+        { id: 5, name: 'Coupe', slug: 'coupe', count: 8 },
+        { id: 6, name: 'Convertible', slug: 'convertible', count: 3 }
+    ]
 }
 
 const FeaturedPostCard = ({ post, language }) => (
@@ -144,15 +306,61 @@ const PostCard = ({ post, language }) => (
     </Link>
 )
 
+const BrandCard = ({ brand }) => (
+    <Link 
+        href={`/cars/${brand.slug}`}
+        className="group block"
+    >
+        <div className="bg-white p-6 rounded-xl border border-slate-200 hover:border-red-600 hover:shadow-lg transition-all duration-300 text-center h-full">
+            {/* Brand Logo */}
+            <div className="mb-4">
+                {brand.featuredImageUrl ? (
+                    <div className="relative w-16 h-16 mx-auto">
+                        <Image 
+                            src={brand.featuredImageUrl} 
+                            alt={`${brand.name} logo`}
+                            fill
+                            sizes="64px"
+                            className="object-contain group-hover:scale-110 transition-transform duration-300"
+                            loading="lazy"
+                        />
+                    </div>
+                ) : (
+                    <div className="w-16 h-16 flex items-center justify-center bg-slate-100 rounded-full mx-auto group-hover:bg-red-50 transition-colors duration-300">
+                        <span className="text-xl font-bold text-slate-500 group-hover:text-red-600">
+                            {brand.name?.charAt(0) || '?'}
+                        </span>
+                    </div>
+                )}
+            </div>
+            
+            {/* Brand Information */}
+            <h3 className="text-lg font-semibold text-slate-900 group-hover:text-red-600 transition-colors duration-300 mb-1">
+                {brand.name}
+            </h3>
+            <p className="text-sm text-slate-500">
+                {brand.count ? `${brand.count} models` : 'View models'}
+            </p>
+        </div>
+    </Link>
+)
+
+
+
+
+
 const HomePage = async () => {
     // In a real app, you'd handle potential errors from these fetches
-    const [englishPosts, hindiPosts] = await Promise.all([
+    const [englishPosts, hindiPosts, featuredBrands, featuredCars, bodyTypes] = await Promise.all([
         getEnglishPosts(),
-        getHindiPosts()
+        getHindiPosts(),
+        getFeaturedCarBrands(),
+        getFeaturedCars(),
+        getCarBodyTypes()
     ]).catch(err => {
-        console.error("Error fetching posts:", err);
+        console.error("Error fetching data:", err);
         // Return empty arrays or some default state if fetching fails
-        return [[], []]; 
+        return [[], [], [], [], []]; 
     });
 
     // Handle cases where posts might be empty to avoid errors
@@ -165,6 +373,35 @@ const HomePage = async () => {
     return (
         <div className="bg-slate-50 min-h-screen"> {/* Ensures background covers screen */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 max-w-7xl">
+            
+            {/* Featured Car Brands Section */}
+            {featuredBrands && featuredBrands.length > 0 && (
+            <section aria-labelledby="featured-brands-title">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 id="featured-brands-title" className="text-3xl font-bold text-slate-800">Featured Car Brands</h2>
+                    <Link 
+                        href="/cars"
+                        className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"
+                    >
+                        View All Brands
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        </svg>
+                    </Link>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+                    {featuredBrands.map(brand => (
+                        <BrandCard key={brand.id} brand={brand} />
+                    ))}
+                </div>
+            </section>
+            )}
+            
+            {/* Featured Cars Section */}
+            <FeaturedCarsSection 
+                featuredCars={featuredCars} 
+                bodyTypes={bodyTypes} 
+            />
             
             {/* English Section */}
             {firstEnglishPost && ( 

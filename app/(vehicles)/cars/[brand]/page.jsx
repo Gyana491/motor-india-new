@@ -8,12 +8,13 @@ async function getBrandDetails(brand) {
   const response = await fetch(`${process.env.BACKEND}/wp-json/wp/v2/car_brand?slug=${brand}`, {
     next: { revalidate: 3600 } // Revalidate every hour
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch brand details: ${response.status}`);
   }
-  
-  return response.json();
+
+  const data = await response.json();
+  return data;
 }
 
 async function getRelatedBrands() {
@@ -32,12 +33,13 @@ async function getBrandModels(brand) {
   const response = await fetch(`${process.env.BACKEND}/wp-json/api/cars?brand=${brand}`, {
     next: { revalidate: 3600 } // Cache for 1 hour
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch brand models: ${response.status}`);
   }
-  
-  return response.json();
+
+  const data = await response.json();
+  return data;
 }
 
 export default async function BrandPage({ params }) {
@@ -52,8 +54,14 @@ export default async function BrandPage({ params }) {
 
   const brandInfo = brandDetails[0];
   let brandLogo = null;
-  if (brandInfo.acf?.featured_image) {
-    brandLogo = await getFeaturedImage(brandInfo.acf.featured_image);
+
+  // Fetch brand logo with proper error handling
+  if (brandInfo?.acf?.featured_image) {
+    try {
+      brandLogo = await getFeaturedImage(brandInfo.acf.featured_image);
+    } catch (error) {
+      console.error(`Error fetching brand logo for ${brandInfo.name}:`, error);
+    }
   }
 
   // Filter out current brand from related brands
@@ -62,6 +70,60 @@ export default async function BrandPage({ params }) {
   // Separate models into current and upcoming
   const currentModels = models.filter(model => model.is_launched !== "0");
   const upcomingModels = models.filter(model => model.is_launched === "0");
+
+  // Fetch images for current models
+  const currentModelsWithImages = await Promise.all(
+    currentModels.map(async (model) => {
+      let imageUrl = null;
+      let imageAlt = model.title;
+
+      try {
+        // Try to get featured image from ACF if available
+        if (model.acf?.featured_image) {
+          imageUrl = await getFeaturedImage(model.acf.featured_image);
+        }
+        // Fallback to existing image_url if available
+        else if (model.image_url) {
+          imageUrl = model.image_url;
+        }
+      } catch (error) {
+        console.error(`Error fetching image for model ${model.title}:`, error);
+      }
+
+      return {
+        ...model,
+        image_url: imageUrl,
+        image_alt: imageAlt
+      };
+    })
+  );
+
+  // Fetch images for upcoming models
+  const upcomingModelsWithImages = await Promise.all(
+    upcomingModels.map(async (model) => {
+      let imageUrl = null;
+      let imageAlt = model.title;
+
+      try {
+        // Try to get featured image from ACF if available
+        if (model.acf?.featured_image) {
+          imageUrl = await getFeaturedImage(model.acf.featured_image);
+        }
+        // Fallback to existing image_url if available
+        else if (model.image_url) {
+          imageUrl = model.image_url;
+        }
+      } catch (error) {
+        console.error(`Error fetching image for upcoming model ${model.title}:`, error);
+      }
+
+      return {
+        ...model,
+        image_url: imageUrl,
+        image_alt: imageAlt
+      };
+    })
+  );
 
   // Fetch featured images for related brands
   const relatedBrandsWithImages = await Promise.all(
@@ -78,14 +140,14 @@ export default async function BrandPage({ params }) {
   );
 
   // Sort models by price for the price table
-  const sortedByPrice = [...currentModels].sort((a, b) => {
+  const sortedByPrice = [...currentModelsWithImages].sort((a, b) => {
     const priceA = a.price?.min_price || 0;
     const priceB = b.price?.min_price || 0;
     return priceA - priceB;
   }).filter(model => model.price?.min_price > 0 || model.price?.max_price > 0);
 
   // Sort upcoming models by price
-  const sortedUpcoming = [...upcomingModels].sort((a, b) => {
+  const sortedUpcoming = [...upcomingModelsWithImages].sort((a, b) => {
     const priceA = a.price?.min_price || 0;
     const priceB = b.price?.min_price || 0;
     return priceA - priceB;
@@ -175,13 +237,13 @@ export default async function BrandPage({ params }) {
               {/* Right side - Stats Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full max-w-xl md:max-w-lg mt-8 md:mt-0 md:ml-auto">
                 <div className="glassmorphism text-center px-5 py-7 rounded-2xl flex flex-col items-center backdrop-blur-md bg-white/5 border border-white/10 shadow-xl transform transition-transform hover:scale-105 hover:shadow-red-500/10 duration-300">
-                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{currentModels.length}</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{currentModelsWithImages.length}</div>
                   <div className="text-sm text-slate-300 font-medium">Available Models</div>
                   <div className="w-10 h-0.5 bg-gradient-to-r from-red-400 to-red-500 mt-3 rounded-full"></div>
                 </div>
                 
                 <div className="glassmorphism text-center px-5 py-7 rounded-2xl flex flex-col items-center backdrop-blur-md bg-white/5 border border-white/10 shadow-xl transform transition-transform hover:scale-105 hover:shadow-red-500/10 duration-300">
-                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{upcomingModels.length}</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{upcomingModelsWithImages.length}</div>
                   <div className="text-sm text-slate-300 font-medium">Upcoming Models</div>
                   <div className="w-10 h-0.5 bg-gradient-to-r from-red-400 to-red-500 mt-3 rounded-full"></div>
                 </div>
@@ -419,7 +481,7 @@ export default async function BrandPage({ params }) {
           )}
 
           {/* Current Models Grid */}
-          {currentModels.length > 0 && (
+          {currentModelsWithImages.length > 0 && (
             <div className="mb-14">
               <div className="flex items-center mb-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 flex-grow flex items-center">
@@ -434,7 +496,7 @@ export default async function BrandPage({ params }) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {currentModels.map(model => (
+                {currentModelsWithImages.map(model => (
                   <a 
                     key={model.id}
                     href={`/cars/${brand}/${model.model_slug}`}
@@ -488,7 +550,7 @@ export default async function BrandPage({ params }) {
           )}
 
           {/* Upcoming Models Grid */}
-          {upcomingModels.length > 0 && (
+          {upcomingModelsWithImages.length > 0 && (
             <div className="mb-14">
               <div className="flex items-center mb-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 flex-grow flex items-center">
@@ -502,7 +564,7 @@ export default async function BrandPage({ params }) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {upcomingModels.map(model => (
+                {upcomingModelsWithImages.map(model => (
                   <a 
                     key={model.id}
                     href={`/cars/${brand}/${model.model_slug}`}
@@ -673,13 +735,11 @@ export async function generateMetadata({ params }) {
     const currentModels = models.filter(model => model.is_launched !== "0");
     const upcomingModels = models.filter(model => model.is_launched === "0");
 
-    const modelCount = currentModels.length;
-    const upcomingCount = upcomingModels.length;
-    
-    // Enhanced price range with better formatting
+  const modelCount = currentModelsWithImages.length;
+  const upcomingCount = upcomingModelsWithImages.length;    // Enhanced price range with better formatting
     let priceRange = '';
-    if (currentModels.length > 0) {
-      const sortedModels = [...currentModels].sort((a, b) => 
+    if (currentModelsWithImages.length > 0) {
+      const sortedModels = [...currentModelsWithImages].sort((a, b) => 
         (a.price?.min_price || 0) - (b.price?.min_price || 0)
       );
       const lowestPrice = sortedModels[0]?.price?.min_price_formatted;

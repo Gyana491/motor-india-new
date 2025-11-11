@@ -1,7 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { getFeaturedImage } from '@/lib/api'
-import FeaturedCarsSection from './FeaturedCarsSection'
+import { getCarBodyTypes } from '@/lib/services/carService'
+import CarsByBodyTypeServerSection from './CarsByBodyTypeServerSection'
 
 const cleanHtmlEntities = (text) => {
     if (!text) return text;
@@ -102,120 +103,6 @@ const getFeaturedCarBrands = async () => {
         console.error('Error fetching car brands:', error)
         return []
     }
-}
-
-const getFeaturedCars = async () => {
-    // Return static featured cars data instead of API calls
-    return [
-        {
-            id: 1,
-            name: 'Maruti Suzuki Swift',
-            slug: 'swift',
-            brand: 'Maruti Suzuki',
-            brandSlug: 'maruti-suzuki',
-            bodyType: 'Hatchback',
-            priceRange: '5.85 - 9.45 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The Swift is a stylish and fuel-efficient hatchback that offers great value for money.'
-        },
-        {
-            id: 2,
-            name: 'Hyundai Creta',
-            slug: 'creta',
-            brand: 'Hyundai',
-            brandSlug: 'hyundai',
-            bodyType: 'SUV',
-            priceRange: '10.87 - 18.17 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The Creta is a premium SUV with modern design and advanced features.'
-        },
-        {
-            id: 3,
-            name: 'Honda City',
-            slug: 'city',
-            brand: 'Honda',
-            brandSlug: 'honda',
-            bodyType: 'Sedan',
-            priceRange: '11.82 - 15.32 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The City offers a perfect blend of comfort, performance, and reliability.'
-        },
-        {
-            id: 4,
-            name: 'Mahindra Scorpio',
-            slug: 'scorpio',
-            brand: 'Mahindra',
-            brandSlug: 'mahindra',
-            bodyType: 'SUV',
-            priceRange: '13.59 - 17.35 Lakh',
-            fuelType: 'Diesel',
-            featuredImageUrl: null,
-            excerpt: 'The Scorpio is known for its rugged design and excellent off-road capabilities.'
-        },
-        {
-            id: 5,
-            name: 'Tata Nexon',
-            slug: 'nexon',
-            brand: 'Tata',
-            brandSlug: 'tata',
-            bodyType: 'SUV',
-            priceRange: '7.99 - 14.49 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The Nexon combines modern technology with adventurous spirit.'
-        },
-        {
-            id: 6,
-            name: 'Kia Seltos',
-            slug: 'seltos',
-            brand: 'Kia',
-            brandSlug: 'kia',
-            bodyType: 'SUV',
-            priceRange: '10.90 - 18.40 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The Seltos offers bold design and cutting-edge features.'
-        },
-        {
-            id: 7,
-            name: 'Toyota Fortuner',
-            slug: 'fortuner',
-            brand: 'Toyota',
-            brandSlug: 'toyota',
-            bodyType: 'SUV',
-            priceRange: '32.58 - 50.34 Lakh',
-            fuelType: 'Diesel',
-            featuredImageUrl: null,
-            excerpt: 'The Fortuner is a premium SUV known for its durability and luxury.'
-        },
-        {
-            id: 8,
-            name: 'Volkswagen Polo',
-            slug: 'polo',
-            brand: 'Volkswagen',
-            brandSlug: 'volkswagen',
-            bodyType: 'Hatchback',
-            priceRange: '6.50 - 10.25 Lakh',
-            fuelType: 'Petrol',
-            featuredImageUrl: null,
-            excerpt: 'The Polo offers German engineering with a sporty design.'
-        }
-    ]
-}
-
-const getCarBodyTypes = async () => {
-    // Return static body types data instead of API calls
-    return [
-        { id: 1, name: 'Hatchback', slug: 'hatchback', count: 25 },
-        { id: 2, name: 'Sedan', slug: 'sedan', count: 18 },
-        { id: 3, name: 'SUV', slug: 'suv', count: 32 },
-        { id: 4, name: 'MUV', slug: 'muv', count: 12 },
-        { id: 5, name: 'Coupe', slug: 'coupe', count: 8 },
-        { id: 6, name: 'Convertible', slug: 'convertible', count: 3 }
-    ]
 }
 
 const FeaturedPostCard = ({ post, language }) => (
@@ -351,16 +238,15 @@ const BrandCard = ({ brand }) => (
 
 const HomePage = async () => {
     // In a real app, you'd handle potential errors from these fetches
-    const [englishPosts, hindiPosts, featuredBrands, featuredCars, bodyTypes] = await Promise.all([
+    const [englishPosts, hindiPosts, featuredBrands, bodyTypes] = await Promise.all([
         getEnglishPosts(),
         getHindiPosts(),
         getFeaturedCarBrands(),
-        getFeaturedCars(),
         getCarBodyTypes()
     ]).catch(err => {
         console.error("Error fetching data:", err);
         // Return empty arrays or some default state if fetching fails
-        return [[], [], [], [], []]; 
+        return [[], [], [], []]; 
     });
 
     // Handle cases where posts might be empty to avoid errors
@@ -397,11 +283,8 @@ const HomePage = async () => {
             </section>
             )}
             
-            {/* Featured Cars Section */}
-            <FeaturedCarsSection 
-                featuredCars={featuredCars} 
-                bodyTypes={bodyTypes} 
-            />
+            {/* Cars by Body Type Section */}
+            <CarsByBodyTypeServerSection />
             
             {/* English Section */}
             {firstEnglishPost && ( 

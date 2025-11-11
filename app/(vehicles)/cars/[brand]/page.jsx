@@ -735,11 +735,11 @@ export async function generateMetadata({ params }) {
     const currentModels = models.filter(model => model.is_launched !== "0");
     const upcomingModels = models.filter(model => model.is_launched === "0");
 
-  const modelCount = currentModelsWithImages.length;
-  const upcomingCount = upcomingModelsWithImages.length;    // Enhanced price range with better formatting
+  const modelCount = currentModels.length;
+  const upcomingCount = upcomingModels.length;    // Enhanced price range with better formatting
     let priceRange = '';
-    if (currentModelsWithImages.length > 0) {
-      const sortedModels = [...currentModelsWithImages].sort((a, b) => 
+    if (currentModels.length > 0) {
+      const sortedModels = [...currentModels].sort((a, b) => 
         (a.price?.min_price || 0) - (b.price?.min_price || 0)
       );
       const lowestPrice = sortedModels[0]?.price?.min_price_formatted;

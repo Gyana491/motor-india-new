@@ -389,17 +389,28 @@ const HeroSearchSection = () => {
             )}
           </div>
 
-          {/* Popular Search Tags */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-2xl mx-auto">
+          {/* Popular Car Links */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-4xl mx-auto">
             <span className="text-slate-400 text-sm sm:text-base font-medium mb-2 sm:mb-0">Popular:</span>
-            {['Nexon','Swift', 'Innova', 'Thar', 'Fortuner', 'City', 'Creta'].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setSearchQuery(tag)}
+            {[
+              { name: 'Nexon', url: '/cars/tata/nexon' },
+              { name: 'Punch', url: '/cars/tata/punch' },
+              { name: 'Fronx', url: '/cars/maruti/fronx' },
+              { name: 'Thar', url: '/cars/mahindra/thar' },
+              { name: 'Venue', url: '/cars/hyundai/venue' },
+              { name: 'Creta', url: '/cars/hyundai/creta' },
+              { name: 'Tiago', url: '/cars/tata/tiago' },
+              { name: 'BMW X7', url: '/cars/bmw/x7' },
+              { name: 'Range Rover', url: '/cars/land-rover/range-rover' },
+             
+            ].map((car) => (
+              <Link
+                key={car.name}
+                href={car.url}
                 className="px-3 sm:px-4 py-1 sm:py-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium rounded-full transition-colors duration-200 border border-white/20 hover:border-white/30"
               >
-                {tag}
-              </button>
+                {car.name}
+              </Link>
             ))}
           </div>
         </div>

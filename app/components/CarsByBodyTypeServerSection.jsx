@@ -38,7 +38,7 @@ const CarCard = ({ car }) => (
             {/* Car Information */}
             <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-slate-900 group-hover:text-red-600 transition-colors duration-300 line-clamp-1">
+                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-slate-900 group-hover:text-red-600 transition-colors duration-300 line-clamp-1">
                         {car.name}
                     </h3>
                     {car.brand && (
@@ -78,10 +78,10 @@ const CarCard = ({ car }) => (
 const BodyTypeSection = ({ bodyType, cars }) => (
     <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-slate-800">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-slate-800">
                 {bodyType.name}
                 {bodyType.count > 0 && (
-                    <span className="text-sm text-slate-500 ml-2">
+                    <span className="text-xs sm:text-sm text-slate-500 ml-2">
                         ({bodyType.count} cars)
                     </span>
                 )}
@@ -149,7 +149,7 @@ const CarsByBodyTypeServerSection = async () => {
         return (
             <section aria-labelledby="cars-by-body-type-title">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 id="cars-by-body-type-title" className="text-3xl font-bold text-slate-800">
+                    <h2 id="cars-by-body-type-title" className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
                         Cars by Body Type
                     </h2>
                     <Link

@@ -359,7 +359,7 @@ export default async function BrandPage({ params }) {
                       {sortedByPrice.map((model, idx) => (
                         <tr key={model.id} className={`hover:bg-slate-50 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                           <td className="px-6 py-4 font-medium">
-                            <Link href={`/cars/${brand}/${model.model_slug}`}
+                            <Link href={model.model_slug ? `/cars/${brand}/${model.model_slug}` : `/cars/${brand}`}
                               className="text-gray-800 hover:text-red-600 transition-colors"
                             >
                               {model.title}
@@ -434,7 +434,7 @@ export default async function BrandPage({ params }) {
                       {sortedUpcoming.map((model, idx) => (
                         <tr key={model.id} className={`hover:bg-slate-50 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                           <td className="px-6 py-4 font-medium">
-                            <Link href={`/cars/${brand}/${model.model_slug}`}
+                            <Link href={model.model_slug ? `/cars/${brand}/${model.model_slug}` : `/cars/${brand}`}
                               className="text-gray-800 hover:text-red-600 transition-colors"
                             >
                               {model.title}
@@ -497,9 +497,9 @@ export default async function BrandPage({ params }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {currentModelsWithImages.map(model => (
-                  <a 
+                  <Link 
                     key={model.id}
-                    href={`/cars/${brand}/${model.model_slug}`}
+                    href={model.model_slug ? `/cars/${brand}/${model.model_slug}` : `/cars/${brand}`}
                     className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
@@ -543,7 +543,7 @@ export default async function BrandPage({ params }) {
                         </p>
                       )}
                     </div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -565,9 +565,9 @@ export default async function BrandPage({ params }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {upcomingModelsWithImages.map(model => (
-                  <a 
+                  <Link 
                     key={model.id}
-                    href={`/cars/${brand}/${model.model_slug}`}
+                    href={model.model_slug ? `/cars/${brand}/${model.model_slug}` : `/cars/${brand}`}
                     className="group bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
@@ -620,7 +620,7 @@ export default async function BrandPage({ params }) {
                         </p>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -643,9 +643,9 @@ export default async function BrandPage({ params }) {
               
               <div className="grid grid-cols-3 gap-3">
                 {relatedBrandsWithImages.map(relatedBrand => (
-                  <a
+                  <Link
                     key={relatedBrand.id}
-                    href={`/cars/${relatedBrand.slug}`}
+                    href={relatedBrand.slug ? `/cars/${relatedBrand.slug}` : '/cars'}
                     className="group flex flex-col items-center"
                   >
                     <div className="w-full aspect-square bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden p-2 flex items-center justify-center relative">
@@ -673,17 +673,17 @@ export default async function BrandPage({ params }) {
                     <span className="mt-2 text-xs font-medium text-center text-gray-700 group-hover:text-red-600 transition-colors duration-300 truncate w-full">
                       {relatedBrand.name}
                     </span>
-                  </a>
+                  </Link>
                 ))}
               </div>
               
               <div className="mt-6 text-center">
-                <a href="/cars" className="inline-flex items-center justify-center gap-1 py-2 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-sm transition-colors">
+                <Link href="/cars" className="inline-flex items-center justify-center gap-1 py-2 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium text-sm transition-colors">
                   <span>View all brands</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
             

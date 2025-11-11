@@ -3,6 +3,7 @@ import Image from "next/image"
 import { getFeaturedImage } from '@/lib/api'
 import { getCarBodyTypes } from '@/lib/services/carService'
 import CarsByBodyTypeServerSection from './CarsByBodyTypeServerSection'
+import HeroSearchSection from './HeroSearchSection'
 
 const cleanHtmlEntities = (text) => {
     if (!text) return text;
@@ -133,7 +134,7 @@ const FeaturedPostCard = ({ post, language }) => (
             </div>
             {/* Content Section */}
             <div className="lg:w-2/5 p-6 flex flex-col justify-center">
-                <h2 className="text-2xl xl:text-3xl font-bold mb-3 group-hover:text-red-700 transition-colors duration-300 line-clamp-3">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 group-hover:text-red-700 transition-colors duration-300 line-clamp-3">
                     {post.title}
                 </h2>
                 {post.excerpt && (
@@ -180,7 +181,7 @@ const PostCard = ({ post, language }) => (
             </div>
             {/* Content Section */}
             <div className="flex-1 p-4 flex flex-col justify-center">
-                <h2 className="text-lg font-semibold mb-1.5 group-hover:text-red-700 transition-colors duration-300 line-clamp-2">
+                <h2 className="text-sm sm:text-base md:text-lg font-semibold mb-1.5 group-hover:text-red-700 transition-colors duration-300 line-clamp-2">
                     {post.title}
                 </h2>
                 {post.date && (
@@ -222,10 +223,10 @@ const BrandCard = ({ brand }) => (
             </div>
             
             {/* Brand Information */}
-            <h3 className="text-lg font-semibold text-slate-900 group-hover:text-red-600 transition-colors duration-300 mb-1">
+            <h3 className="text-sm sm:text-base md:text-lg font-semibold text-slate-900 group-hover:text-red-600 transition-colors duration-300 mb-1">
                 {brand.name}
             </h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-xs sm:text-sm text-slate-500">
                 {brand.count ? `${brand.count} models` : 'View models'}
             </p>
         </div>
@@ -258,13 +259,16 @@ const HomePage = async () => {
 
     return (
         <div className="bg-slate-50 min-h-screen"> {/* Ensures background covers screen */}
+            {/* Hero Search Section */}
+            <HeroSearchSection />
+            
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 max-w-7xl">
             
             {/* Featured Car Brands Section */}
             {featuredBrands && featuredBrands.length > 0 && (
             <section aria-labelledby="featured-brands-title">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 id="featured-brands-title" className="text-3xl font-bold text-slate-800">Featured Car Brands</h2>
+                    <h2 id="featured-brands-title" className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">Featured Car Brands</h2>
                     <Link 
                         href="/cars"
                         className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"
@@ -290,7 +294,7 @@ const HomePage = async () => {
             {firstEnglishPost && ( 
             <section aria-labelledby="latest-articles-title"> 
                 <div className="flex justify-between items-center mb-6">
-                    <h2 id="latest-articles-title" className="text-3xl font-bold text-slate-800">Latest Articles</h2>
+                    <h2 id="latest-articles-title" className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">Latest Articles</h2>
                     <Link 
                         href="/articles"
                         className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"
@@ -318,7 +322,7 @@ const HomePage = async () => {
             {firstHindiPost && ( // Only render section if there's a post
             <section aria-labelledby="hindi-लेख-title"> {/* Added aria-labelledby */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 id="hindi-लेख-title" className="text-3xl font-bold text-slate-800">हिंदी लेख</h2>
+                    <h2 id="hindi-लेख-title" className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">हिंदी लेख</h2>
                     <Link 
                         href="/hindi"
                         className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1.5 hover:underline"

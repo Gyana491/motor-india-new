@@ -121,7 +121,7 @@ const HeroSearchSection = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       // Redirect to search results page
-      window.location.href = `/cars?search=${encodeURIComponent(searchQuery.trim())}`;
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 
@@ -184,8 +184,8 @@ const HeroSearchSection = () => {
           </p>
 
           {/* Search Section */}
-          <div className="relative max-w-2xl mx-auto mb-8">
-            <form onSubmit={handleSearchSubmit} className="relative">
+          <div className="relative max-w-2xl mx-auto mb-8" role="search">
+            {/* Converted form to div so Enter key doesn't trigger redirect; only Search button navigates */}
               <div 
                 ref={searchRef}
                 className={`relative flex items-center bg-white rounded-2xl shadow-2xl transition-all duration-300 ${
@@ -207,6 +207,13 @@ const HeroSearchSection = () => {
                   onFocus={() => {
                     setIsInputFocused(true);
                     if (searchResults.length > 0) setShowResults(true);
+                  }}
+                  onKeyDown={(e) => {
+                    // Prevent Enter key from redirecting; user must click Search button
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
                   }}
                   placeholder="Search cars..."
                   className="w-full pl-12 sm:pl-16 pr-16 sm:pr-20 py-4 sm:py-5 text-slate-800 text-base sm:text-lg rounded-2xl border-0 focus:outline-none focus:ring-0 placeholder-slate-400"
@@ -233,13 +240,14 @@ const HeroSearchSection = () => {
 
                 {/* Search Button */}
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleSearchSubmit}
                   className="absolute right-2 bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl transition-colors duration-200 font-semibold text-sm sm:text-base"
                 >
                   Search
                 </button>
               </div>
-            </form>
+            
 
             {/* Search Results Dropdown */}
             {showResults && searchResults.length > 0 && (
@@ -294,16 +302,7 @@ const HeroSearchSection = () => {
                   </button>
                 ))}
 
-                {/* View All Results Link */}
-                {searchQuery && (
-                  <Link
-                    href={`/cars?search=${encodeURIComponent(searchQuery)}`}
-                    onClick={() => handleResultClick({})}
-                    className="block px-4 sm:px-6 py-3 sm:py-4 text-center text-red-600 hover:bg-red-50 font-semibold border-t border-slate-200 transition-colors duration-200"
-                  >
-                    View all results for &quot;{searchQuery}&quot; →
-                  </Link>
-                )}
+                {/* Removed "View all results" link to ensure only Search button triggers redirect */}
               </div>
             )}
 

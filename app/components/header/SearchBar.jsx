@@ -85,14 +85,24 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
   };
 
   const constructCarUrl = (car) => {
-    const brandName = car.acf?.brand_name?.toLowerCase() || '';
-    const modelName = car.acf?.model_slug || '';
-    const modelSlug = modelName ? modelName.toLowerCase().trim().replace(/\s+/g, '-') : '';
-    return `/cars/${brandName}/${modelSlug}`.toLowerCase().trim().replace(/\s+/g, '-');
+    if (!car || !car.acf) return '/cars';
+    const brandName = car.acf.brand_name?.toLowerCase()?.trim() || '';
+    const modelSlug = car.acf.model_slug?.toLowerCase()?.trim() || car.slug?.toLowerCase()?.trim() || '';
+    if (!brandName || !modelSlug) return '/cars';
+    const cleanBrandName = brandName.replace(/\s+/g, '-');
+    const cleanModelSlug = modelSlug.replace(/\s+/g, '-');
+    return `/cars/${cleanBrandName}/${cleanModelSlug}`;
+  };
+
+  const handleSearchSubmit = () => {
+    const q = searchValue.trim();
+    if (!q) return;
+    if (onClose) onClose();
+    window.location.href = `/search?q=${encodeURIComponent(q)}`;
   };
 
   return (
-    <div className={`relative transition-all duration-300 ${className}`} ref={searchRef}>
+    <div className={`relative transition-all duration-300 ${className}`} ref={searchRef} role="search">
       <div className={`flex items-center bg-white overflow-hidden rounded-lg 
         border ${isFocused ? 'border-[#FF3B30] shadow-lg' : 'border-gray-200'} 
         transition-all duration-200 hover:shadow-md`}>
@@ -107,6 +117,13 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
           placeholder="Search cars..."
           autoFocus={autoFocus}
           onFocus={() => setIsFocused(true)}
+          onKeyDown={(e) => {
+            // Prevent Enter from submitting; only the Search button triggers redirect
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
           className="w-full px-3 py-3 bg-transparent focus:outline-none text-gray-700"
         />
         
@@ -118,6 +135,15 @@ const SearchBar = ({ className, autoFocus, onClose }) => {
             <IoMdClose className="text-lg" />
           </button>
         )}
+
+        {/* Search button - only this navigates to /search */}
+        <button
+          type="button"
+          onClick={handleSearchSubmit}
+          className="mx-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded"
+        >
+          Search
+        </button>
       </div>
 
       {/* Search Suggestions Dropdown */}
